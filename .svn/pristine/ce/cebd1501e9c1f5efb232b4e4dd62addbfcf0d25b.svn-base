@@ -1,0 +1,345 @@
+<div class="container d-print-none">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>
+                Titulares y/o representantes de la marca
+                <app-tooltip _tooltip="tooltip"> </app-tooltip>
+            </h4>
+            <p>
+                Aquí podrá consignar los titulares y/o representantes de su marca
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-borderless table-sm">
+                    <tbody *ngFor="let item of lstPersona; let row=index;">
+                        <tr>
+                            <th *ngIf="item.nuFlagTituRepre== 1">{{row + 1}}.- Titular</th>
+                            <th *ngIf="item.nuFlagTituRepre!= 1">{{row + 1}}.- Representante</th>
+                            <td rowspan="2">
+                                <button type="button" class="btn btn-light" (click)="eliminarPersona(row)">
+                                    <span style="font-size: 1em; color: orange;">
+                                        <!-- <i class="fas fa-trash"></i> -->
+                                        <i class="material-icons" style="vertical-align: middle; color: red;">delete</i>
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Persona Natural -->
+                        <tr *ngIf="item.nuIdTipoDocumento == 1 || item.nuIdTipoDocumento == 3">
+                            <th>Persona Natural ({{item.vcIdTipoDocumento}}: {{item.vcDocIdentidad}})</th>
+                        </tr>
+                        <tr *ngIf="item.nuIdTipoDocumento == 1 || item.nuIdTipoDocumento == 3">
+                            <td>
+                                <b>Nombres y Apellidos:</b> {{item.vcNombres}} {{item.vcApPaterno}} {{item.vcApMaterno}}
+                            </td>
+                        </tr>
+                        <!-- Persona Natural -->
+                        <!-- Persona Jurídica -->
+                        <tr *ngIf="item.nuIdTipoDocumento == 2">
+                            <th>Persona Jurídica ({{item.vcIdTipoDocumento}}: {{item.vcDocIdentidad}})</th>
+                        </tr>
+                        <tr *ngIf="item.nuIdTipoDocumento == 2">
+                            <td><b>Razón Social:</b> {{item.vcRazonSocial}}</td>
+                        </tr>
+                        <!-- Persona Jurídica -->
+                        <tr>
+                            <td>
+                                <div class="dropdown-divider"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- *ngIf="lstPersona.length > 0" -->
+        <div class="col-md-12">
+            <div class="btn btn-light btn-file" (click)="showModalPersonaManual()">
+                <i class="material-icons" style="vertical-align: middle;">add</i>
+                Agregar persona
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal agregar persona -->
+<ng-template #templateAgregarPersona>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Agregar titular y/o representante</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"
+            *ngIf="lstPersona.length > 0">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <form [formGroup]="agregarPersonaForm" autocomplete="off">
+                <div class="form-row" *ngIf="blShowRow1">
+                    <div class="form-group col-sm-6" *ngIf="blShowDataTipoPersoneria">
+                        <label for="cb-tipo-personeria"><b>Tipo de personería:</b></label>
+                        <select id="cb-tipo-personeria" class="form-control"
+                        formControlName="nuTipoPersoneria">
+                            <option value="" disabled selected hidden>Seleccione...</option>
+                            <option *ngFor="let item of lstTipoPersoneria" [value]="item.nuIdPersoneria">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                    <!--  -->
+                    <div class="form-group col-sm-6" *ngIf="blShowDataTipoDoc">
+                        <label for="txt-tipo-documento"><b>Tipo de documento:</b></label>
+                        <label id="lbl-tipo-documento" class="form-text"
+                            *ngIf="!blShowComboTipoDoc">{{objPersona.vcIdTipoDocumento}}</label>
+                        <select id="cb-tipo-documento" class="form-control"
+                        formControlName="nuTipoDocumento"
+                            *ngIf="blShowComboTipoDoc">
+                            <option value="" disabled selected hidden>Seleccione...</option>
+                            <option *ngFor="let item of lstTipoDocumento" [value]="item.nuIdTipoDocumento">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                    <!--  -->
+                    <div class="form-group col-sm-6" *ngIf="blShowDataNroDoc">
+                        <label for="txt-nro-documento"><b>Número de documento:</b></label>
+                        <label id="lbl-nro-documento" class="form-text"
+                            *ngIf="!blShowInputNroDoc">{{objPersona.vcDocIdentidad}}</label>
+                        <div class="input-group" *ngIf="blShowInputNroDoc">
+                            <input type="text" class="form-control" id="txt-nro-documento" placeholder=""
+                                formControlName="vcNroDocumento" [readonly]="!agregarPersonaForm.invalid"
+                                maxlength="11">
+                            <div class="input-group-append" *ngIf="blShowBtnBuscarPide">
+                                <button class="btn btn-outline-primary" type="button"
+                                    [disabled]="agregarPersonaForm.controls.nuTipoDocumento.value == 3"
+                                    [disabled]="!agregarPersonaForm.invalid"
+                                     (click)="obtenerPide()">
+                                    <span class="material-icons" style="vertical-align: middle;"> search </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowRow2">
+                    <div class="form-group col-sm-6" *ngIf="blShowDataNombres">
+                        <label for="txt-nombres"><b>Nombres:</b></label>
+                        <label id="lbl-nombres" class="form-text" *ngIf="blShowLabelNombres">
+                            {{objPersona.vcNombres}}
+                        </label>
+                        <input type="text" class="form-control" id="txt-nombres" placeholder="Ingrese nombres"
+                            formControlName="vcNombres" *ngIf="blShowInputNombres" autocomplete="nope" maxlength="60">
+                    </div>
+                    <div class="form-group col-sm-6" *ngIf="blShowDataRSocial">
+                        <label for="txt-rsocial"><b>Razón Social:</b></label>
+                        <label id="lbl-rsocial" class="form-text" *ngIf="blShowLabelRSocial">
+                            {{objPersona.vcRazonSocial}}
+                        </label>
+                        <input type="text" class="form-control" id="txt-rsocial" placeholder="Ingrese razón social"
+                            formControlName="vcRsocial" *ngIf="blShowInputRSocial" autocomplete="nope" maxlength="60">
+                    </div>
+                    <!--  -->
+                    <div class="form-group col-sm-6" *ngIf="blShowDataApPat">
+                        <label for="txt-primer-apellido"><b>Primer Apellido:</b></label>
+                        <label id="lbl-primer-apellido" class="form-text" *ngIf="blShowLabelApPat">
+                            {{objPersona.vcApPaterno}}
+                        </label>
+                        <input type="text" class="form-control" id="txt-primer-apellido"
+                            placeholder="Ingrese primer apellido" formControlName="vcPrimerApellido"
+                            *ngIf="blShowInputApPat" autocomplete="nope" maxlength="60">
+                    </div>
+                    <div class="form-group col-sm-6" *ngIf="blShowDataPaisOrigen1">
+                        <label for="cb-pais-origen"><b>País Origen:</b></label>
+                        <label id="lbl-pais-origen" class="form-text" *ngIf="blShowLabelPaisOrigen1">
+                            PERÚ
+                        </label>
+                        <select id="cb-pais" class="form-control"
+                        formControlName="nuPaisOrigen"
+                            *ngIf="blShowComboPaisOrigen1">
+                            <option value="" disabled selected hidden>Seleccione...</option>
+                            <option *ngFor="let item of lstPaises" [value]="item.nuIdUbigeoPais">
+                                {{item.vcPais}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowRow3">
+                    <div class="form-group col-sm-6" *ngIf="blShowDataApMat">
+                        <label for="txt-segundo-apellido"><b>Segundo Apellido:</b></label>
+                        <label id="lbl-segundo-apellido" class="form-text" *ngIf="blShowLabelApMat">
+                            {{objPersona.vcApMaterno}}
+                        </label>
+                        <input type="text" class="form-control" id="txt-segundo-apellido"
+                            placeholder="Ingrese segundo apellido" formControlName="vcSegundoApellido"
+                            *ngIf="blShowInputApMat" autocomplete="nope" maxlength="60">
+                    </div>
+                    <!--  -->
+                    <div class="form-group col-sm-6" *ngIf="blShowDataPaisOrigen2">
+                        <label for="cb-pais-origen"><b>País Origen 2:</b></label>
+                        <label id="lbl-pais-origen" class="form-text" *ngIf="blShowLabelPaisOrigen2">
+                            PERÚ
+                        </label>
+                        <select id="cb-pais" class="form-control"
+                        formControlName="nuPaisOrigen"
+                            *ngIf="blShowComboPaisOrigen2">
+                            <option value="" disabled selected hidden>Seleccione...</option>
+                            <option *ngFor="let item of lstPaises" [value]="item.nuIdUbigeoPais">
+                                {{item.vcPais}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowRow4">
+                    <div class="form-group col-sm-6" *ngIf="blShowDataPaisResidencia">
+                        <label for="cb-pais-origen"><b>País Residencia:</b></label>
+                        <label id="lbl-pais-origen" class="form-text" *ngIf="blShowLabelPaisResidencia">
+                            PERÚ
+                        </label>
+                        <select id="cb-pais" class="form-control" formControlName="nuPaisResidencia"
+                            *ngIf="blShowComboPaisResidencia">
+                            <option value="" disabled selected hidden>Seleccionar...</option>
+                            <option *ngFor="let item of lstPaises" [value]="item.nuIdUbigeo">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                    <!--  -->
+                    <div class="form-group col-sm-6" *ngIf="blShowDataDepto">
+                        <label for="cb-departamento"><b>Departamento Residencia:</b></label>
+                        <select id="cb-departamento" class="form-control"
+                         formControlName="nuDepartamento"
+                            *ngIf="blShowComboDepto" (change)="cambiarDepartamento($event.target.value)">
+                            <option value="" disabled selected hidden>Seleccionar...</option>
+                            <option *ngFor="let item of lstDepartamentos" [value]="item.nuIdUbigeo">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowRow5">
+                    <div class="form-group col-sm-6" *ngIf="blShowDataProv">
+                        <label for="cb-provincia"><b>Provincia Residencia:</b></label>
+                        <select id="cb-provincia_1" class="form-control"
+                        formControlName="nuProvincia"
+                            *ngIf="blShowComboProv" (change)="cambiarProvincia($event.target.value)">
+                            <option value="" disabled selected hidden>Seleccionar...</option>
+                            <option *ngFor="let item of lstProvincias" [value]="item.nuIdUbigeo">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                    <!--  -->
+                    <div class="form-group col-sm-6" *ngIf="blShowDataDist">
+                        <label for="cb-distrito"><b>Distrito Residencia: </b></label>
+                        <select id="cb-distrito" class="form-control"
+                        formControlName="nuDistrito"
+                            *ngIf="blShowComboDist">
+                            <option value="" disabled selected hidden>Seleccionar...</option>
+                            <option *ngFor="let item of lstDistritos" [value]="item.nuIdUbigeo">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowRow6">
+                    <div class="form-group col-sm-12" *ngIf="blShowDataDireccion">
+                        <label for="txt-direccion"><b>Dirección:</b></label>
+                        <textarea class="form-control" id="txt-direccion" placeholder="Ingrese dirección"
+                            formControlName="vcDireccion" *ngIf="blShowInputDireccion" autocomplete="nope"
+                            maxlength="250"></textarea>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowRow7">
+                    <div class="form-group col-sm-6" *ngIf="blShowDataSexo">
+                        <label for="cb-genero"><b>Sexo:</b></label>
+                        <select id="cb-genero" class="form-control"
+                        formControlName="nuGenero" *ngIf="blShowComboSexo">
+                            <option value="" disabled selected hidden>Seleccione...</option>
+                            <option *ngFor="let item of lstGenero" [value]="item.nuIdGenero">
+                                {{item.vcDescripcion}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-6" *ngIf="blShowDataTelefono">
+                        <label for="txt-telefono"><b>Teléfono de contacto:</b></label>
+                        <input type="text" class="form-control" id="txt-telefono" placeholder="Ingrese Nro. de teléfono"
+                            formControlName="vcTelefono" autocomplete="nope" maxlength="30" *ngIf="blShowInputTelefono">
+                    </div>
+                </div>
+                <div class="row mt-2" *ngIf="blShowRow8">
+                    <div class="col-md-12">
+                        <label><b>Seleccione Titular o Representante:</b></label>
+                        <!-- <h6>
+                            Seleccione Titular o Representante
+                        </h6> -->
+                    </div>
+                </div>
+                <div class="form-row mt-2" *ngIf="blShowRow8">
+                    <!-- <div class="form-group col-sm-12"> -->
+                    <div class="col-sm-12">
+                        <div class="btn-group btn-block" btnRadioGroup formControlName="nuFlagTituRepre">
+                            <label btnRadio="1" class="btn btn-outline-success btn-md" style="width: 100%;">
+                                TITULAR DE LA MARCA
+                            </label>
+                            <label btnRadio="2" class="btn btn-outline-success btn-md"
+                                style="width: 100%;">REPRESENTANTE LEGAL DE LA MARCA</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-row mt-2" *ngIf="blShowDataRepresentante && agregarPersonaForm.controls.nuFlagTituRepre.value==2">
+                    <div class="form-group col-sm-6">
+                        <label for="txt-nro-partida-registral"><b>Partida Registral:</b></label>
+                        <input type="text" class="form-control" id="txt-nro-partida-registral"
+                            placeholder="Ingrese partida registral" formControlName="vcPartidaRegistral"
+                            autocomplete="nope">
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="txt-nro-expediente"><b>Nro. de Expediente:</b></label>
+                        <input type="text" class="form-control" id="txt-nro-expediente"
+                            placeholder="Ingrese nro de expediente" formControlName="vcNroExpediente"
+                            autocomplete="nope">
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowDataRepresentante && agregarPersonaForm.controls.nuFlagTituRepre.value==2">
+                  <div class="col-md-12">
+                    <div class="btn btn-light btn-file" *ngIf="objConfigArchRepresentante.nuCantidadArchivos>lstArchivoRepresentanteTmp.length">
+                      <i class="material-icons" style="vertical-align: middle;">add</i> Agregar documento
+                      <input type="file" (change)="cargarArchivoRepresentante($event)" #input_archivo_representante>
+                  </div>
+                  </div>
+              </div>
+                <div class="row mt-2" *ngIf="blShowDataRepresentante">
+                    <div class="col-md-12">
+                        <h5>
+                            Lista de Adjuntos
+                        </h5>
+                    </div>
+                </div>
+                <div class="form-row" *ngIf="blShowDataRepresentante && agregarPersonaForm.controls.nuFlagTituRepre.value==2">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Tamaño</th>
+                                    <th scope="col">Opc.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of lstArchivoRepresentanteTmp let row = index">
+                                    <th scope="row">{{row + 1}}</th>
+                                    <td>{{item.vcNomOriginal}}</td>
+                                    <td>{{item.nuLong}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" (click)="eliminarArchivo(row)">
+                                            <i class="material-icons" style="vertical-align: middle;">delete_outline</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" [disabled]="isInvalidModal" class="btn btn-primary" (click)="agregarPersona()">Agregar</button>
+    </div>
+</ng-template>
+<!-- Modal agregar persona -->

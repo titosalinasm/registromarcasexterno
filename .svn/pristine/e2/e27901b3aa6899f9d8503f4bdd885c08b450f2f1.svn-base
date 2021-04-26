@@ -1,0 +1,6 @@
+<!-- <img src="./assets/images/info_icon.png" width="20"> -->
+<!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
+<!-- <span class="material-icons"> info </span> -->
+<span class="material-icons" [popover]="popDescripcion" [popoverTitle]="popTitle" triggers="mouseenter:mouseleave">
+    info_outline
+</span>

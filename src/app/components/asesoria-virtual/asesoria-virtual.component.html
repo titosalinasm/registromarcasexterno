@@ -1,0 +1,70 @@
+<form [formGroup]="asesoriaForm" autocomplete="off">
+    <div class="container d-print-none">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 text-left">
+                            <h4>
+                                {{objConfiguracion.clValor1?.vcPregunta}}
+                                <app-tooltip [popTitle]="objConfiguracion?.clValor1?.vcTooltipTitulo"
+                                    [popDescripcion]="objConfiguracion?.clValor1?.vcTooltipDes">
+                                </app-tooltip>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-left">
+                            <label class="switch">
+                                <input type="checkbox" formControlName="blAsesoria">
+                                <div class="slider round">
+                                    <span class="on">SI</span><span class="off">NO</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="asesoriaForm.controls.blAsesoria.value">
+                        <div class="col-sm-12">
+                            <h4>
+                                {{objConfiguracion.clValor1.vcLblNroAsesoria}}
+                                <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.vcTooltipNroAsesoria">
+                                </app-tooltip>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="asesoriaForm.controls.blAsesoria.value">
+                        <div class="col-sm-12">
+                            <input type="text" (keypress)="doValidacionCampoAsesoria($event)" class="form-control col-md-6" maxlength="7" minlength="5" formControlName="txtNroAsesoria">
+                            <div class="_message_error" *ngIf="asesoriaForm.controls.blAsesoria.value && asesoriaForm.value.txtNroAsesoria.length<6">
+                              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>(Campo obligatorio) ingrese número de asesoría
+                            </div>
+                          </div>
+                    </div>
+                    <!-- <pre>{{asesoriaForm.value | json}}</pre>
+                    <pre>{{asesoriaForm.valid}}</pre> -->
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-success">
+                    <h5 class="card-header bg-success" style="color:white;">
+                        {{objConfiguracion?.clValor1?.vcCuadroTitulo}}
+                    </h5>
+                    <div class="card-body" [innerHTML]="objConfiguracion?.clValor1?.vcCuadroInformacion">
+                        <!-- <h5 class="card-title">Special title treatment</h5> -->
+                        <!-- <p class="card-text">Una asesoría previa agilizará el proceso de registro de marca, si no cuenta con
+                        una, por favor ingrese <a href="http://www.google.com.pe" class="alert-link"
+                            target="_blank">aquí</a>.</p> -->
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-12">
+                <p>{{asesoriaForm.value | json}}</p>
+                <p>status: {{asesoriaForm.status | json}}</p>
+            </div>
+        </div> -->
+    </div>
+</form>

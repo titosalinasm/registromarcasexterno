@@ -1,0 +1,65 @@
+<div class="container-fluid mb-3">
+  <div class="row">
+    <!-- <div class="row mt-2"> -->
+    <div class="col-sm-6 col-md-6 col-lg-2 mx-0 my-0 px-0 py-0">
+      <div class="wrapp">
+        <div class="triangulo_inicio" [ngClass]="{'active': activo==1}"> </div>
+        <div class="rectangulo" [ngClass]="{'active': activo==1}">
+          <div class="circulo">1</div>
+          <p>Asesoría virtual</p>
+        </div>
+        <div class="triangulo_fin" [ngClass]="{'active': activo==1}"> </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-2 mx-0 my-0 px-0 py-0">
+      <div class="wrapp">
+        <div class="triangulo_inicio" [ngClass]="{'active': activo==2}"> </div>
+        <div class="rectangulo" [ngClass]="{'active': activo==2}">
+          <div class="circulo">2</div>
+          <p>Datos de mi signo</p>
+        </div>
+        <div class="triangulo_fin" [ngClass]="{'active': activo==2}"> </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-2 mx-0 my-0 px-0 py-0">
+      <div class="wrapp">
+        <div class="triangulo_inicio" [ngClass]="{'active': activo==3}"> </div>
+        <div class="rectangulo" [ngClass]="{'active': activo==3}">
+          <div class="circulo">3</div>
+          <p>Clasificación de mi signo</p>
+        </div>
+        <div class="triangulo_fin" [ngClass]="{'active': activo==3}"> </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-2 mx-0 my-0 px-0 py-0">
+      <div class="wrapp">
+        <div class="triangulo_inicio" [ngClass]="{'active': activo==4}"> </div>
+        <div class="rectangulo" [ngClass]="{'active': activo==4}">
+          <div class="circulo">4</div>
+          <p>Prioridad extranjera</p>
+        </div>
+        <div class="triangulo_fin" [ngClass]="{'active': activo==4}"> </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-2 mx-0 my-0 px-0 py-0">
+      <div class="wrapp">
+        <div class="triangulo_inicio" [ngClass]="{'active': activo==5}"> </div>
+        <div class="rectangulo" [ngClass]="{'active': activo==5}">
+          <div class="circulo">5</div>
+          <p>Mis datos personales</p>
+        </div>
+        <div class="triangulo_fin" [ngClass]="{'active': activo==5}"> </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-2 mx-0 my-0 px-0 py-0">
+      <div class="wrapp">
+        <div class="triangulo_inicio" [ngClass]="{'active': activo==6}"> </div>
+        <div class="rectangulo" [ngClass]="{'active': activo==6}">
+          <div class="circulo">6</div>
+          <p>Confirmar y pagar</p>
+        </div>
+        <div class="triangulo_fin" [ngClass]="{'active': activo==6}"> </div>
+      </div>
+    </div>
+  </div>
+</div>

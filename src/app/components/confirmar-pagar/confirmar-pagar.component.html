@@ -1,0 +1,597 @@
+<div class="container d-print-none">
+    <div class="row mt-3">
+        <div class="col-sm">
+            <h4>Resumen de solicitud de registro</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="badge badge-success mr-2">1</span>Verifica la asesoría virtual
+                        <button type="button" class="btn btn btn-outline-warning btn-sm">
+                            <i class="material-icons" style="vertical-align: middle;" (click)="editarCard(1)">edit</i>
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Recibió asesoría:</th>
+                                    <td>{{objRegistroMarcas.vcFlagAsesoria}}</td>
+                                </tr>
+                                <tr *ngIf="objRegistroMarcas.blShowNroAsesoria">
+                                    <th scope="row">Número de la asesoría:</th>
+                                    <td>{{objRegistroMarcas.vcNroAsesoria}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6  mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="badge badge-success mr-2">4</span>Verifica la prioridad extranjera
+                        <button type="button" class="btn btn btn-outline-warning btn-sm">
+                            <i class="material-icons" style="vertical-align: middle;" (click)="editarCard(4)">edit</i>
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        Prioridad extranjera:
+                                    </th>
+                                    <td>
+                                        <table width="100%">
+                                            <tr
+                                                *ngFor="let item of objRegistroMarcas.lstPrioridadExtranjera; let row = index">
+                                                <td>Clase<span *ngIf="item.nuFlagTodos == 1">s</span> {{item.vcClases}}
+                                                    <a class="link" (click)="modalPrioridadExtranjera(item)">(Ver
+                                                        detalle)</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <!-- <td>
+                                        {{item.vcClases}}
+                                        <a href="https://pagalo.pe/" class="link" target="_blank">(Ver
+                                            detalle)</a>
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="badge badge-success mr-2">2</span>Verifica datos del signo
+                        <button type="button" class="btn btn btn-outline-warning btn-sm">
+                            <i class="material-icons" style="vertical-align: middle;" (click)="editarCard(2)">edit</i>
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Tipo de solicitud:</th>
+                                    <td>{{objRegistroMarcas.vcTipoSolicitud}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Interés real:</th>
+                                    <td>{{objRegistroMarcas.vcInteresReal}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Derecho preferente:</th>
+                                    <td>{{objRegistroMarcas.vcDerechoPreferente}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Tipo de signo:</th>
+                                    <td>{{objRegistroMarcas.vcTipoSigno}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Denominación:</th>
+                                    <td>{{objRegistroMarcas.vcDenominacion}}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Figura:</th>
+                                    <td>
+                                        <img [src]="objRegistroMarcas.objArchivoSigno?.vcFileBase64" height="30"
+                                            class="mr-2">
+                                        <a 
+                                            href="objRegistroMarcas.objArchivoSigno?.vcFileBase64" class="link" download>
+                                            Descargar
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6  mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="badge badge-success mr-2">5</span>Verifica los datos personales
+                        <button type="button" class="btn btn btn-outline-warning btn-sm">
+                            <i class="material-icons" style="vertical-align: middle;" (click)="editarCard(5)">edit</i>
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <ng-container
+                                    *ngFor="let item of objRegistroMarcas.lstDatosPersonales; let row = index">
+                                    <tr>
+                                        <th scope="row">
+                                            <ng-container *ngIf="item.nuIdTipoPersona == 1">Titular</ng-container>
+                                            <ng-container *ngIf="item.nuIdTipoPersona == 2">Representante</ng-container>
+                                            {{row + 1}}:
+
+                                        </th>
+                                        <td>
+                                            <ng-container *ngIf="item.nuIdTipoPersona == 1">Persona Natural
+                                            </ng-container>
+                                            <ng-container *ngIf="item.nuIdTipoPersona == 2">Persona Jurídica
+                                            </ng-container>
+                                            ({{item.vcIdTipoDocumento}}: {{item.vcDocIdentidad}})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">
+                                            <a class="link" (click)="modalDatosPersonales(item)">(Ver detalle)</a>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="item.nuIdTipoPersona == 1">
+                                                {{item.vcNombres}} {{item.vcApPaterno}} {{item.vcApMaterno}}
+                                            </ng-container>
+                                            <ng-container *ngIf="item.nuIdTipoPersona == 2">
+                                                {{item.vcRazonSocial}}
+                                            </ng-container>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="badge badge-success mr-2">3</span>Verifica la clasificación del signo
+                        <button type="button" class="btn btn btn-outline-warning btn-sm">
+                            <i class="material-icons" style="vertical-align: middle;" (click)="editarCard(3)">edit</i>
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        Clases seleccionadas:
+                                    </th>
+                                    <td>
+                                        <table width="100%">
+                                            <tr
+                                                *ngFor="let item of objRegistroMarcas.lstClasesSelccionadas; let row = index">
+                                                <td>Clase {{item.nuIdClase}}
+                                                    <a class="link" (click)="modalClasificacionSigno(item)">(Ver
+                                                        detalle)</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6  mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="badge badge-success mr-2">6</span>Total a pagar </h5>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Clases principal:</th>
+                                    <td>{{objRegistroMarcas.objPago?.valorClasePrincipal | number:'1.2'}} </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Clases adicionales:</th>
+                                    <td>{{objRegistroMarcas.objPago?.valorClaseAdicional | number:'1.2'}} </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Total a pagar:</th>
+                                    <td>{{objRegistroMarcas.objPago?.sumaTotalClases | number:'1.2'}} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-warning float-right _btnround _color-warning float-right"
+                        *ngIf="blBtnPagar" (click)="toggleBtnPagar()">PAGAR
+                        <span class="material-icons ml-2" style="vertical-align: middle;">
+                            payments
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="!blBtnPagar">
+        <!-- pagos -->
+        <hr>
+
+        <div class="row mt-3 mb-3">
+            <div class="col-sm">
+                <h4>Elige tu medio de pago</h4>
+            </div>
+        </div>
+        <!-- <div class="row mb-3">
+            <div class="col-sm">
+                <p>Agregue el arancel para proceder con el registro de su obra &nbsp;<app-tooltip
+                        triggers="mouseenter:mouseleave" popover="{{objInfo.vcInfoRegistraPago}}">
+                    </app-tooltip>
+                </p>
+            </div>
+        </div> -->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="rb-pagalo" name="medio-pago" value="1" class="custom-control-input"
+                        [(ngModel)]="nuMedioPago" (change)="cambiarMedioPago($event)">
+                    <label class="custom-control-label" for="rb-pagalo">Pagalo.pe</label>
+                    <p>Ingresando al enlace <a href="https://pagalo.pe/" class="link" target="_blank">pagalo.pe</a>
+                        puede pagar
+                        sus aranceles utilizando tarjetas de crédito o
+                        débito
+                        Visa, MasterCard y American Express <br>
+                        Considere que para la clase principal deberá usar el código de arancel x y para las adicionales
+                        el código de arancel z
+                    </p>
+                </div>
+
+                <!-- Registro de pago -->
+                <div class="row mb-3" *ngIf="nuMedioPago == 1 && isInvalid">
+                    <div class="col-sm-6">
+                        <form [formGroup]="pagoForm">
+                            <div class="form-group">
+                                <label for="txtTituloObraLiteraria"><b>Fecha de operación</b></label>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Seleccione fecha de operación" class="form-control"
+                                        formControlName="dtFechaOperacion" bsDatepicker readonly>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <span class="material-icons" style="vertical-align: middle;">
+                                                calendar_today
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtTituloObraLiteraria"><b>Número de operación</b></label>
+                                <input type="text" class="form-control" placeholder="Ingrese número de operación"
+                                    formControlName="vcNroOperacion" (keypress)="numericOnly($event)">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <button type="button" class="btn btn-warning _btnround _color-warning"
+                                        (click)="agregarPago()" [disabled]="pagoForm.invalid">
+                                        <span class="material-icons" style="vertical-align: middle;">
+                                            add
+                                        </span>
+                                        <!-- <i class=" fa fa-plus mr-3"></i> -->
+                                        Agregar pago
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6 mt-3">
+                        <div>
+                            <tabset>
+                                <tab heading="Pagalo.pe" id="tab1">
+                                    <img src="./assets/images/pagalo-voucher.png" width="80%" draggable="false">
+                                    <!-- <a href="https://pagalo.pe/" target="_blank">https://www.pagalo.pe</a> -->
+                                </tab>
+                                <tab heading="Banco de la Nación">
+                                    <img src="./assets/images/bn-voucher.png" width="80%" draggable="false">
+                                </tab>
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
+                <!-- Registro de pago -->
+
+                <ng-container *ngIf="lstPagos.length > 0">
+                    <div class="row mt-3">
+                        <div class="col-sm">
+                            <h4>Listado de aranceles ingresados</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="row">Fecha</th>
+                                            <th scope="row">Número</th>
+                                            <th scope="row">Concepto</th>
+                                            <th scope="row">Monto</th>
+                                            <th scope="row">
+                                                <i class="material-icons" style="vertical-align: middle;"> more_vert
+                                                </i>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of lstPagos; let row = index">
+                                            <td>{{item.dtFechaOperacion}}</td>
+                                            <td>{{item.vcNroOperacion}}</td>
+                                            <td>Registro Marcas</td>
+                                            <td>{{item.nuMonto}}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-light"
+                                                    (click)="eliminarPago(row)">
+                                                    <span style="font-size: 1em; color: red;">
+                                                        <!-- <i class="fas fa-trash"></i> -->
+                                                        <i class="material-icons"
+                                                            style="vertical-align: middle;">delete</i>
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <!-- <div class="custom-control custom-radio">
+                    <input type="radio" id="rb-tarjeta-credito" name="medio-pago" value="2" class="custom-control-input"
+                        [(ngModel)]="nuMedioPago" (change)="cambiarMedioPago($event)">
+                    <label class="custom-control-label" for="rb-tarjeta-credito">Tarjeta de Crédito</label>
+                </div> -->
+            </div>
+        </div>
+        <!-- pagos -->
+    </ng-container>
+</div>
+
+<!-- Modal prioridad extranjera -->
+<ng-template #templatePrioridadExtranjera>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Prioridad Extranjera</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="form-group row">
+                <label for="nu-id-clase" class="col-sm-5 col-form-label">Clase:</label>
+                <div class="col-sm-7">
+                    <label id="nu-id-clase" class="form-text">{{objPrioridadExtranjera.vcClases}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="vc-nro-solicitud" class="col-sm-5 col-form-label">N° Solicitud:</label>
+                <div class="col-sm-7">
+                    <label id="vc-nro-solicitud" class="form-text">{{objPrioridadExtranjera.vcNroSolicitud}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="dt-fecha-prioridad" class="col-sm-5 col-form-label">Fecha de la
+                    prioridad:</label>
+                <div class="col-sm-7">
+                    <label id="dt-fecha-prioridad" class="form-text">{{objPrioridadExtranjera.vcFechaPrioridad}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="nu-pais-prioridad" class="col-sm-5 col-form-label">País de
+                    prioridad:</label>
+                <div class="col-sm-7">
+                    <label id="nu-pais-prioridad" class="form-text">{{objPrioridadExtranjera.vcIdUbigeoPais}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="nu-id-tipo-prioridad" class="col-sm-5 col-form-label">Tipo de
+                    prioridad:</label>
+                <div class="col-sm-7">
+                    <label for="nu-id-tipo-prioridad"
+                        class="form-text">{{objPrioridadExtranjera.vcTipoPrioridad}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="vc-productos-servicios" class="col-sm-5 col-form-label">Producto(s) y/o
+                    Servicio(s):</label>
+                <div class="col-sm-7">
+                    <label for="vc-productos-servicios"
+                        class="form-text">{{objPrioridadExtranjera.vcProductoServicio}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="adjuntar-documento" class="col-sm-5 col-form-label">Documentos adjuntos:</label>
+                <div class="col-sm-7">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Tamaño</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of objPrioridadExtranjera.lstArchivoPrioridad; let row = index">
+                                    <th scope="row">{{row + 1}}</th>
+                                    <td>{{item.vcNomOriginal}}.{{item.vcExtension}}</td>
+                                    <td>{{item.nuTamanio}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cerrar</button>
+    </div>
+</ng-template>
+<!-- Modal prioridad extranjera -->
+
+<!-- Modal clasificacion signo -->
+<ng-template #templateClasificacionSigno>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Clasificación de mi signo</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col" width="5%">Clase</th>
+                        <th scope="col" width="95%">Productos y/o Servicios</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">{{objClasificacionSigno.nuIdClase}}</th>
+                        <td>{{objClasificacionSigno.vcClase}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cerrar</button>
+    </div>
+</ng-template>
+<!-- Modal clasificacion signo -->
+
+<!-- Modal confirmacion -->
+<ng-template #templateConfirmacionRegistro>
+    <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm text-center">
+                    <h5 id="header-and-footer">
+                        <span style="margin-right: 5px; vertical-align: middle;">
+                            <i class="material-icons md-48 text-success">
+                                check_circle
+                            </i>
+                            <!-- <i class="fas fa-check-circle fa-5x text-success"></i> -->
+                        </span>
+                        <p class="bd-content-title font-mb h4 text-success mt-2">
+                            ¡SOLICITUD DE REGISTRO
+                            INGRESADA
+                            SATISFACTORIAMENTE!
+                        </p>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm text-center">
+                    <h6>El proceso de solicitud de registro de marca ha
+                        culminado. </h6>
+                    <h6>Para mayor información, revise su correo electrónico. </h6>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm text-center">
+                    <h5>Nro. de Expediente: {{vcCodExpediente}}</h5>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm text-center">
+                    <button type="button" class="btn btn-warning text-black"
+                        (click)="finalizar()"><b>Finalizar</b></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</ng-template>
+
+<!--modal datos personales-->
+<ng-template #templeteDatosPersonales>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Datos de la persona</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col" width="30%"></th>
+                            <th scope="col" width="70%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">TIPO DE DOCUMENTO: </th>
+                            <td>{{objDatosPersona.vcIdTipoDocumento}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">DOCUMENTO: </th>
+                            <td>{{objDatosPersona.vcDocIdentidad}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Nombre: </th>
+                            <td>{{objDatosPersona.vcNombres}}{{objDatosPersona.vcApMaterno}}{{objDatosPersona.vcApPaterno}}{{objDatosPersona.vcRazonSocial}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Titular y/o Representante: </th>
+                            <td *ngIf="objDatosPersona.nuFlagTituRepre==1">Titular</td>
+                            <td *ngIf="objDatosPersona.nuFlagTituRepre!=1">Representante</td>--
+                        </tr>
+                        <tr>
+                            <th scope="row">Ubigeo: </th>
+                            <td>{{objDatosPersona.vcRutaUbigeo}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Telefono: </th>-
+                            <td>{{objDatosPersona.vcTelefono}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-template>

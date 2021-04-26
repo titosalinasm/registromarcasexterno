@@ -1,0 +1,246 @@
+<div class="container d-print-none">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>
+                ¿Usted registró esta marca previamente en otro país?
+                <app-tooltip _tooltip="tooltip"> </app-tooltip>
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <label class="switch">
+                <input type="checkbox" [(ngModel)]="nuFlagPrioridadExtr" (change)="checkValue($event)">
+                <div class="slider round">
+                    <span class="on">SI</span><span class="off">NO</span>
+                </div>
+            </label>
+        </div>
+    </div>
+    <div class="row" *ngIf="nuFlagPrioridadExtr">
+        <div class="col-md-12">
+            <table class="table table-borderless table-sm" *ngFor="let item of lstPrioridad; let row = index">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <h4>Prioridad {{row + 1}} {{item.vcNombreClases}}</h4>
+                        </th>
+                        <th scope="col">
+                            <button type="button" class="btn btn-light mr-2">
+                                <i class="material-icons" style="vertical-align: middle; color: orange;"
+                                    (click)="editarPrioridad(item, row)">edit</i>
+                            </button>
+                            <button type="button" class="btn btn-light" (click)="eliminarPrioridad(row)">
+                                <i class="material-icons" style="vertical-align: middle; color: red;">delete_outline</i>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row">N° Solicitud:</td>
+                        <td>{{item.vcNroSolicitud}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Fecha de la prioridad:</td>
+                        <td>{{item.vcFechaPrioridad}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">País de la prioridad:</td>
+                        <td>{{item.vcIdUbigeoPais}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Tipo de la prioridad:</td>
+                        <td>{{item.vcTipoPrioridad}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Documento de la prioridad:</td>
+                        <td>
+                            <div class="table-responsive" *ngIf="item.lstArchivoPrioridad.length > 0">
+                                <table class="table table-sm">
+                                    <!-- <thead>
+                                        <tr>
+                                            <th scope="col">N°</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Tamaño</th>
+                                            <th scope="col">Opc.</th>
+                                        </tr>
+                                    </thead> -->
+                                    <tbody>
+                                        <tr *ngFor="let item2 of item.lstArchivoPrioridad; let row = index">
+                                            <!-- <th scope="row">{{row + 1}}</th> -->
+                                            <td>{{item2.vcNomOriginal}}.{{item2.vcExtension}}</td>
+                                            <!-- <td>{{item.nuTamanio}}</td> -->
+                                            <!-- <td>
+                                                <i class="material-icons" style="vertical-align: middle;"
+                                                    (click)="eliminarArchivoPrioridad(row)">delete_outline</i>
+                                            </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" *ngIf="nuFlagPrioridadExtr">
+        <div class="col-md-12">
+            <div class="btn btn-light btn-file" (click)="modalAgregarPrioridad(templateAgregarPrioridad)">
+                <i class="material-icons" style="vertical-align: middle;">add</i>
+                Agregar prioridad
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal agregar prioridad -->
+<ng-template #templateAgregarPrioridad>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Agregar prioridad</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-light btn-block"
+                        (click)="openChild(templateAgregarPrioridadChild, 1)">
+                        Para todas mis clases
+                    </button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-light btn-block"
+                        (click)="openChild(templateAgregarPrioridadChild, 2)">
+                        Para una sola clase
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- Modal agregar prioridad -->
+
+<!-- Modal agregar prioridad -->
+<ng-template #templateAgregarPrioridadChild>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Agregar prioridad extranjera</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <p>Consigne la información de la prioridad proveniente de otro país:</p>
+            <form [formGroup]="agregarPrioridadForm" autocomplete="off">
+                <div class="form-group row" *ngIf="blShowClase">
+                    <label for="nu-id-clase" class="col-sm-5 col-form-label">Clase:</label>
+                    <div class="col-sm-7">
+                        <select class="custom-select" id="nu-id-clase"
+                            [ngClass]="{'is-invalid': (agregarPrioridadForm.controls.nuIdClase.invalid && (agregarPrioridadForm.controls.nuIdClase.dirty || agregarPrioridadForm.controls.nuIdClase.touched))}"
+                            formControlName="nuIdClase">
+                            <option *ngFor="let item of lstClases; let row = index" [ngValue]="item.nuIdClase">
+                                {{item.nuIdClase}}</option>
+                            <!-- <option [ngValue]="2">6</option>
+                            <option [ngValue]="3">7</option> -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="vc-nro-solicitud" class="col-sm-5 col-form-label">N° Solicitud:</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="vc-nro-solicitud" formControlName="vcNroSolicitud">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dt-fecha-prioridad" class="col-sm-5 col-form-label">Fecha de la prioridad:</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="dt-fecha-prioridad" class="form-control"
+                            formControlName="vcFechaPrioridad" bsDatepicker readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="nu-pais-prioridad" class="col-sm-5 col-form-label">País de prioridad:</label>
+                    <div class="col-sm-7">
+                        <select class="custom-select" id="nu-pais-prioridad"
+                            [ngClass]="{'is-invalid': (agregarPrioridadForm.controls.nuPaisPrioridad.invalid && (agregarPrioridadForm.controls.nuPaisPrioridad.dirty || agregarPrioridadForm.controls.nuPaisPrioridad.touched))}"
+                            formControlName="nuPaisPrioridad">
+                            <option *ngFor="let item of lstPaises; let row = index" [ngValue]="item.nuIdUbigeoPais">
+                                {{item.vcPais}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="nu-id-tipo-prioridad" class="col-sm-5 col-form-label">Tipo de prioridad:</label>
+                    <div class="col-sm-7">
+                        <select class="custom-select" id="nu-id-tipo-prioridad"
+                            [ngClass]="{'is-invalid': (agregarPrioridadForm.controls.nuIdClase.invalid && (agregarPrioridadForm.controls.nuIdClase.dirty || agregarPrioridadForm.controls.nuIdClase.touched))}"
+                            formControlName="nuIdTipoPrioridad">
+                            <option *ngFor="let item of lstTipoPrioridad; let row = index"
+                                [ngValue]="item.nuIdPrioridad">{{item.vcDescripcion}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" *ngIf="blShowProductoServicio">
+                    <label for="vc-productos-servicios" class="col-sm-5 col-form-label">Producto(s) y/o
+                        Servicio(s):</label>
+                    <div class="col-sm-7">
+                        <textarea class="form-control" id="vc-productos-servicios"
+                            formControlName="vcProductosServicios"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="adjuntar-documento" class="col-sm-5 col-form-label">Adjuntar documento de
+                        prioridad:</label>
+                    <div class="col-sm-7">
+                        <div class="table-responsive" *ngIf="lstArchivo.length > 0">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">N°</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Tamaño</th>
+                                        <th scope="col">Opc.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of lstArchivo; let row = index">
+                                        <th scope="row">{{row + 1}}</th>
+                                        <td>{{item.vcNomOriginal}}</td>
+                                        <td>{{item.nuLong}}</td>
+                                        <td>
+                                            <i class="material-icons" style="vertical-align: middle;"
+                                                (click)="eliminarArchivoPrioridad(row)">delete_outline</i>
+                                            <!-- <button type="button" class="btn btn-outline-danger"
+                                            (click)="eliminarArchivoPrioridad(row)">
+                                            <i class="material-icons" style="vertical-align: middle;">delete_outline</i>
+                                        </button> -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="btn btn-light btn-file" *ngIf="objConfigArchPrioridad.nuCantidadArchivos>lstArchivo.length">
+                            <i class="material-icons" style="vertical-align: middle;">add</i> Agregar documento
+                            <input type="file" (change)="cargarArchivoPrioridad($event)" #input_archivo_prioridad>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- <p>
+                {{agregarPrioridadForm.value | json}}
+            </p> -->
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-block" (click)="agregarPrioridad()">
+            <i class="material-icons align-middle">done</i>
+            Aceptar
+        </button>
+    </div>
+</ng-template>
+<!-- Modal agregar prioridad -->

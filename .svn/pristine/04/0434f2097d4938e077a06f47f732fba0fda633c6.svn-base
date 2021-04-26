@@ -1,0 +1,125 @@
+<!-- Spinner -->
+<!-- <ng-container *ngIf="spinner">
+  <app-spinner [descripcion]="spinnerMsg"></app-spinner>
+</ng-container> -->
+<!-- Spinner -->
+
+<app-menu></app-menu>
+<app-banner-principal></app-banner-principal>
+<app-stepper [activo]="nuDestino"></app-stepper>
+
+<div class="container d-print-none">
+  <!-- Titulo -->
+  <div class="row mt-3" *ngIf="nuDestino!=5">
+    <div class="col-sm text-center">
+      <h5 id="header-and-footer">
+        <span style="margin-right: 5px; vertical-align: middle;">
+          <!-- <img src="./assets/images/{{objInfo.vcImg}}.png" draggable="false" width="50"> -->
+          <img [src]="objConfiguracion?.clValor1?.vcUrlLogoIzq" draggable="false" width="50">
+        </span>
+        <span class="bd-content-title text-uppercase font-mb h4">{{objConfiguracion?.clValor1?.vcTextoTitulo}}</span>
+      </h5>
+    </div>
+  </div>
+  <!-- Titulo -->
+</div>
+
+<!-- Step 1 -->
+<app-asesoria-virtual #appAsesoriaVirtual [hidden]="nuDestino!=1" (propagar)="nuDestino=$event"
+  (validEvent)="validEventAsesoriaVirtual($event)">
+</app-asesoria-virtual>
+
+<!-- Step 2 -->
+<app-datos-signo #appDatosSigno [hidden]="nuDestino!=2" (propagar)="nuDestino=$event"
+  (validEvent)="validEventDatosSigno($event)">
+</app-datos-signo>
+
+<!-- Step 3 -->
+<app-clasificacion-signo #appClasificacionSigno [hidden]="nuDestino!=3" (propagar)="nuDestino=$event"
+  (validEvent)="validEventClasificacionSigno($event)">
+</app-clasificacion-signo>
+
+<!-- Step 4 -->
+<app-prioridad-extranjera #appPrioridadExtranjera [hidden]="nuDestino!=4" (propagar)="nuDestino=$event"
+  (validEvent)="validEventPrioridadExtranjera($event)">
+</app-prioridad-extranjera>
+
+<!-- Step 5 -->
+<app-datos-personales #appDatosPersonales [hidden]="nuDestino!=5" (propagar)="nuDestino=$event"
+  (validEvent)="validEventDatosPersonales($event)">
+</app-datos-personales>
+
+<!-- Step 6 -->
+<app-confirmar-pagar #appConfirmarPagar [hidden]="nuDestino!=6" (propagar)="nuDestino=$event"
+  (validEvent)="validEventConfirmarPagar($event)">
+</app-confirmar-pagar>
+
+<div class="container d-print-none">
+  <!-- Botones -->
+  <div class="row mt-3">
+    <div class="col-sm">
+      <hr>
+      <!-- Btn Atras -->
+      <button type="submit" class="btn btn-default float-left _color-none" *ngIf="nuDestino===1"
+        (click)="atras(nuDestino)">
+        <i class="material-icons mr-3" style="vertical-align: middle;">arrow_back</i>
+        Atrás
+      </button>
+      <button type="submit" class="btn btn-default float-left _color-none" *ngIf="nuDestino===2"
+        (click)="atras(nuDestino)">
+        <i class="material-icons mr-3" style="vertical-align: middle;">arrow_back</i>
+        Atrás
+      </button>
+      <button type="submit" class="btn btn-default float-left _color-none" *ngIf="nuDestino===3"
+        (click)="atras(nuDestino)">
+        <i class="material-icons mr-3" style="vertical-align: middle;">arrow_back</i>
+        Atrás
+      </button>
+      <button type="submit" class="btn btn-default float-left _color-none" *ngIf="nuDestino===4"
+        (click)="atras(nuDestino)">
+        <i class="material-icons mr-3" style="vertical-align: middle;">arrow_back</i>
+        Atrás
+      </button>
+      <button type="submit" class="btn btn-default float-left _color-none" *ngIf="nuDestino===5"
+        (click)="atras(nuDestino)">
+        <i class="material-icons mr-3" style="vertical-align: middle;">arrow_back</i>
+        Atrás
+      </button>
+      <button type="submit" class="btn btn-default float-left _color-none" *ngIf="nuDestino===6"
+        (click)="atras(nuDestino)">
+        <i class="material-icons mr-3" style="vertical-align: middle;">arrow_back</i>
+        Atrás
+      </button>
+      <!-- Btn Atras -->
+
+      <!-- Btn Siguiente -->
+      <button type="submit" class="btn btn-warning float-right _btnround _color-warning" (click)="siguiente(nuDestino)"
+        *ngIf="nuDestino===1" [disabled]="invalidAsesoriaVirtual">Siguiente
+        <i class="material-icons ml-3" style="vertical-align: middle;">arrow_forward</i>
+      </button>
+      <button type="submit" class="btn btn-warning float-right _btnround _color-warning" (click)="siguiente(nuDestino)"
+        *ngIf="nuDestino===2" [disabled]="invalidDatosSigno">Siguiente
+        <i class="material-icons ml-3" style="vertical-align: middle;">arrow_forward</i>
+      </button>
+      <button type="submit" class="btn btn-warning float-right _btnround _color-warning" (click)="siguiente(nuDestino)"
+        *ngIf="nuDestino===3" [disabled]="invalidClasificacionSigno">Siguiente
+        <i class="material-icons ml-3" style="vertical-align: middle;">arrow_forward</i>
+      </button>
+      <button type="submit" class="btn btn-warning float-right _btnround _color-warning" (click)="siguiente(nuDestino)"
+        *ngIf="nuDestino===4" [disabled]="invalidPrioridadExtranjera">Siguiente
+        <i class="material-icons ml-3" style="vertical-align: middle;">arrow_forward</i>
+      </button>
+      <button type="submit" class="btn btn-warning float-right _btnround _color-warning" (click)="siguiente(nuDestino)"
+        *ngIf="nuDestino===5" [disabled]="invalidDatosPersonales">Siguiente
+        <i class="material-icons ml-3" style="vertical-align: middle;">arrow_forward</i>
+      </button>
+      <button type="submit" class="btn btn-warning float-right _btnround _color-warning" (click)="siguiente(nuDestino)"
+        *ngIf="nuDestino===6" [disabled]="invalidConfirmarPagar">Enviar Solicitud
+        <i class="material-icons ml-3" style="vertical-align: middle;">arrow_forward</i>
+      </button>
+      <!-- Btn Siguiente -->
+
+    </div>
+  </div>
+  <!-- Botones -->
+</div>

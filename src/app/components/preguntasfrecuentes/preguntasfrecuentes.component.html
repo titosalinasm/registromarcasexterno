@@ -1,0 +1,52 @@
+<app-menu [vcUrlManual]="vcManual"></app-menu>
+<app-banner-principal></app-banner-principal>
+
+<div class="container">
+  <div class="row justify-content-around">
+    <div class="ctn-steps step0  col-md-9">
+      <div class="container">
+<div class="row mt-3">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm mt-3 mb-3">
+        <h4>
+          Preguntas frecuentes
+        </h4>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <tbody *ngFor="let item of lstPreguntasFrecuentes; let row = index">
+          <tr>
+            <td>
+              <div [innerHTML]="item.vcPregunta"></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {{item.vcRespuesta}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="container d-print-none">
+  <div class="row mt-3">
+    <div class="col-sm">
+      <!-- <hr> -->
+      <button type="submit" class="btn btn-default float-left" routerLink="/inicio">
+        <i class="fa fa-arrow-left mr-3"></i>
+        Atrás
+      </button>
+    </div>
+  </div>
+</div>

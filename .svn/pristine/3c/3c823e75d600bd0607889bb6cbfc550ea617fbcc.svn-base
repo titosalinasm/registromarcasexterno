@@ -1,0 +1,10 @@
+<!-- {{apiURL}} -->
+<!-- <ng-container *ngIf="spinnerService.visibility | async"> -->
+<!-- <app-spinner *ngIf="spinnerService.visibility | async"></app-spinner> -->
+<!-- </ng-container> -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.5)" size="medium" color="#fff" type="square-spin" [fullScreen]="true">
+</ngx-spinner>
+<!-- <app-menu></app-menu> -->
+<!-- <app-banner-principal></app-banner-principal> -->
+<router-outlet></router-outlet>
+<app-footer></app-footer>

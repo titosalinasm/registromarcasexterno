@@ -1,0 +1,380 @@
+<form [formGroup]="datosSignoForm" autocomplete="off">
+    <div class="container d-print-none">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>
+                    {{objConfiguracion?.clValor1?.objSeccion1?.vcTextoInformativo}}
+                    <app-tooltip [popTitle]="objConfiguracion?.clValor1?.objSeccion1?.vcTooltipTitulo"
+                        [popDescripcion]="objConfiguracion?.clValor1?.objSeccion1?.vcTooltipDes"> </app-tooltip>
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+
+            <ng-container *ngFor="let item of lstTipoSolicitud; let row = index">
+                <div class="col-md-4 mb-3" *ngIf="showItem(row, 1)">
+                    <!-- <div class="col-md-4 mb-3" *ngIf="item.blShowTipoSolicitud"> -->
+                    <div class="container" (click)="seleccionarTipoSolicitud(item)">
+                        <div class="col-md-10 text-center">
+                            <app-tooltip [popDescripcion]="item.vcTooltip">
+                            </app-tooltip>
+                            <div class="sector align-middle">
+                                <a class="lnkSector text-center" [ngClass]="{'active' : item.blSeleccionado}">
+                                    <span class="align-text-middle">{{item.vcDesTipoSolicitud}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <!-- Lema comercial -->
+        <div class="row" *ngIf="lstTipoSolicitud?.length > 2">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-light float-right"
+                    (click)="toggleVerMasSolicitud()"><u>{{lblMasSolicitud}}</u></button>
+            </div>
+        </div>
+        <div class="row" *ngIf="nuIdTipoSolicitud!=1">
+          <div class="col-md-12">
+              <h4>
+                 Requisitos por tipo de solicitud
+              </h4>
+          </div>
+        </div>
+        <div class="row" *ngIf="nuIdTipoSolicitud!=1">
+          <div class="col-md-12">
+            <div class="form-inline">
+              <span><h5>Si no tienes el número de certificado o expediente de tu marca ingresa <a href="http://sistemas.indecopi.gob.pe/osdconsultaspublicas/" target="_blank">aquí</a><b></b></h5></span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="nuIdTipoSolicitud==2">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-inline">
+                  <label >Pará usarse como complemento del signo registrado con certificado Nro:
+                     <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03">
+                     </app-tooltip>
+                    </label>
+                  <input *ngIf="!blReqCerLema" type="text" class="form-control" formControlName="vcCertificadoLema" maxlength="12">
+                  <span *ngIf="blReqCerLema">{{datosSignoForm.value.vcCertificadoLema}}</span>
+                  <button *ngIf="!blReqCerLema"  style="margin-left: 5px;" type="button" class="btn btn-warning"
+                  (click)="doValidarCertificadoLema()"><span class="material-icons">
+                    search
+                    </span></button>
+                  <button *ngIf="blReqCerLema"  style="margin-left: 5px;" type="button"
+                  class="btn btn-danger" (click)="doEliminarCertificadoLema()">
+                  <span class="material-icons">
+                    delete_outline
+                    </span></button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-inline">
+                  <label >Para usarse como complemento del signo solicitado con expediente::  <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03"> </app-tooltip></label>
+                  <input *ngIf="!blReqNroExpeLema" type="text" class="form-control" formControlName="vcNroExpedienteLema" maxlength="12">
+                  <button *ngIf="!blReqNroExpeLema" style="margin-left: 5px;" type="button" class="btn btn-warning"
+                   (click)="doValidarExpedienteLema()"><span class="material-icons">
+                    search
+                    </span></button>
+                    <span *ngIf="blReqNroExpeLema">{{datosSignoForm.value.vcNroExpedienteLema}}</span>
+                    <button *ngIf="blReqNroExpeLema"  style="margin-left: 5px;" type="button"
+                  class="btn btn-danger" (click)="doEliminarNroExpedienteLema()">
+                  <span class="material-icons">
+                    delete_outline
+                    </span></button>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label >La clase del signo o marca a complementar: <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03">
+                  </app-tooltip> </label>
+                  <input style="width: 150px;"  type="text" class="form-control"
+                  formControlName="nuClaseLema"  min="1" max="45" (keypress)="numericOnly($event)"  (keyup)="numeroClase()" maxlength="2">
+                  </div>
+                </div>
+              </div>
+          </div>
+    </div>
+<!-- Nombre comercial y otros -->
+        <div class="row mb-3" *ngIf="nuIdTipoSolicitud==3">
+          <div class="col-md-12">
+            <div class="row">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label>Fecha de primer uso:</label>
+            <input type="text" class="form-control"
+                    formControlName="vcFechaPrimerUsoNombreComercial" bsDatepicker readonly>
+          </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label >Se adjunta documentación que sustenta el primer uso del Nombre Comercial: </label>
+              <div class="btn btn-light btn-file" *ngIf="vcDocPrimerUso==null">
+                <i class="material-icons" style="vertical-align: middle;">add</i>
+                <input type="file" (change)="cargarArchivoDatoRequisito($event, 5)" #input_archivo>
+              </div>
+              <span *ngIf="vcDocPrimerUso!=null"><b> {{vcDocPrimerUso}}</b></span>
+            </div>
+         </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-inline">
+              <label >Para usarse como complemento del signo solicitado con expediente::  <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03"> </app-tooltip></label>
+              <input *ngIf="!blReqNroExpeNombComercial" type="text" class="form-control"
+              formControlName="vcNroExpedienteNombreComercial" maxlength="12">
+              <button *ngIf="!blReqNroExpeNombComercial" style="margin-left: 5px;" type="button" class="btn btn-warning"
+               (click)="doValidarExpedienteNombreComercial()"><span class="material-icons">
+                search
+                </span></button>
+                <span *ngIf="blReqNroExpeNombComercial">{{datosSignoForm.value.vcNroExpedienteNombreComercial}}</span>
+                <button *ngIf="blReqNroExpeNombComercial"  style="margin-left: 5px;" type="button"
+              class="btn btn-danger" (click)="doEliminarNroExpedienteNombreComercial()">
+              <span class="material-icons">
+                delete_outline
+                </span></button>
+              </div>
+          </div>
+        </div>
+        </div>
+        </div>
+        <div class="row mb-3" *ngIf="nuIdTipoSolicitud==4 || nuIdTipoSolicitud==5">
+          <div class="col-md-12" *ngIf="nuIdTipoSolicitud==5">
+            <label >Reglamento de uso: </label>
+            <div class="btn btn-light btn-file" *ngIf="vcDocReglamento==null">
+              <i class="material-icons" style="vertical-align: middle;">add</i>
+              <input type="file" (change)="cargarArchivoDatoRequisito($event, 6)" #input_archivo>
+            </div>
+            <span *ngIf="vcDocReglamento!=null"><b> {{vcDocReglamento}}</b></span>
+          </div>
+          <div class="col-md-12" *ngIf="nuIdTipoSolicitud==4">
+            <label  >Copia de los estatutos del solicitante: </label>
+            <div class="btn btn-light btn-file" *ngIf="vcDocEstatuto==null">
+              <i class="material-icons" style="vertical-align: middle;">add</i>
+              <input type="file" (change)="cargarArchivoDatoRequisito($event, 7)" #input_archivo>
+             </div>
+             <span *ngIf="vcDocEstatuto!=null"><b> {{vcDocEstatuto}}</b></span>
+          </div>
+          <div class="col-md-12" *ngIf="nuIdTipoSolicitud==4">
+            <label >Lista de integrantes: </label>
+            <div class="btn btn-light btn-file" *ngIf="vcDocLista==null">
+              <i class="material-icons" style="vertical-align: middle;">add</i>
+              <input type="file" (change)="cargarArchivoDatoRequisito($event, 8)" #input_archivo>
+            </div>
+            <span *ngIf="vcDocLista!=null"><b> {{vcDocLista}}</b></span>
+          </div>
+        </div>
+
+
+        <div class="row" *ngIf="nuIdTipoSolicitud!=3">
+            <div class="col-md-12">
+                <h4>
+                    {{objConfiguracion?.clValor1?.objSeccion2?.vcTextoInformativo}}
+                </h4>
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="nuIdTipoSolicitud!=3">
+            <div class="col-md-3" *ngIf="nuIdTipoSolicitud!=2">
+                <h5 style="font-weight: normal;">{{objConfiguracion?.clValor1?.objSeccion2?.vcLbl01}}
+                  <app-tooltip
+                        [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip01"> </app-tooltip>
+                </h5>
+            </div>
+            <div class="col-md-1" *ngIf="nuIdTipoSolicitud!=2">
+                <label class="switch" (click)="valueChangeInteresReal()">
+                    <input type="checkbox" formControlName="blInteresReal">
+                    <div class="slider round">
+                        <span class="on">SI</span><span class="off">NO</span>
+                    </div>
+                </label>
+            </div>
+            <div class="col-md-2" *ngIf="nuIdTipoSolicitud!=2">
+                <h5 style="font-weight: normal;">{{objConfiguracion?.clValor1?.objSeccion2?.vcLbl02}} </h5>
+            </div>
+            <div class="col-md-3" *ngIf="nuIdTipoSolicitud!=2">
+                <input  type="text" *ngIf="!lblValidExpediente && !btnValidoExpediente" class="form-control" formControlName="vcNroExpediente" maxlength="12">
+                <span *ngIf="btnValidoExpediente" >{{datosSignoForm.value.vcNroExpediente}}</span>
+
+                <div class="_message_error" *ngIf="btnValidExpediente && !btnValidoExpediente">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese número de expediente
+                </div>
+            </div>
+            <div class="col-md-3" *ngIf="btnValidExpediente && nuIdTipoSolicitud!=2">
+              <button type="button" *ngIf="!btnValidoExpediente" class="btn btn-warning"
+               (click)="doValidarExpediente()">
+                <span class="material-icons">
+                search
+                </span>
+              </button>
+              <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03" *ngIf="!btnValidoExpediente"> </app-tooltip>
+
+              <button *ngIf="btnValidoExpediente"  style="margin-left: 5px;" type="button"
+              class="btn btn-danger" (click)="doEliminarExpediente()">
+              <span class="material-icons">
+                delete_outline
+                </span></button>
+            </div>
+        </div>
+        <div class="row" *ngIf="nuIdTipoSolicitud!=3">
+            <div class="col-md-3">
+                <h5 style="font-weight: normal;">{{objConfiguracion?.clValor1?.objSeccion2?.vcLbl03}} <app-tooltip
+                        [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip02"> </app-tooltip>
+                </h5>
+            </div>
+            <div class="col-md-1">
+                <label class="switch" (click)="valueChangeNroExpediente()">
+                    <input type="checkbox" formControlName="blDerechoPreferente">
+                    <div class="slider round">
+                        <span class="on">SI</span><span class="off">NO</span>
+                    </div>
+                </label>
+            </div>
+            <div class="col-md-2">
+                <h5 style="font-weight: normal;">{{objConfiguracion?.clValor1?.objSeccion2?.vcLbl04}} </h5>
+            </div>
+            <div class="col-md-3">
+                <input type="text" *ngIf="!lblValidCertificado && !btnValidoCertificado" class="form-control" formControlName="vcNroCertificado" maxlength="12">
+                <span *ngIf="btnValidoCertificado" >{{datosSignoForm.value.vcNroCertificado}}</span>
+                <div class="_message_error" *ngIf="btnValidCertificado && !btnValidoCertificado">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese número de certificado
+                </div>
+            </div>
+            <div class="col-md-3" *ngIf="btnValidCertificado">
+              <button type="button" class="btn btn-warning" *ngIf="!btnValidoCertificado"
+              (click)="doValidarCertificado()">
+                <span class="material-icons">
+                  search
+                  </span>
+              </button>
+              <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip04" *ngIf='!btnValidoCertificado'> </app-tooltip>
+
+              <button *ngIf="btnValidoCertificado"  style="margin-left: 5px;" type="button"
+              class="btn btn-danger" (click)="doEliminarCertificado()">
+              <span class="material-icons">
+                delete_outline
+                </span></button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>
+                    {{objConfiguracion?.clValor1?.objSeccion3?.vcTextoInformativo}}
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <ng-container *ngFor="let item of lstTipoSigno; let row = index">
+                <div class="col-md-4 mb-3" *ngIf="showItem(row, 2)">
+                    <!-- <div class="col-md-4 mb-3" *ngIf="item.blShowTipoSigno"> -->
+                    <div class="container" (click)="seleccionarTipoSigno(item)">
+                        <div class="col-md-10 text-center">
+                            <app-tooltip _tooltip="tooltip"> </app-tooltip>
+                            <div class="sector align-middle">
+                                <a class="lnkSector text-center" [ngClass]="{'active' : item.blSeleccionado}">
+                                    <img class="img-fluid mx-auto d-block align-bottom" width="25"
+                                        [src]="item.vcUrlIcono" draggable="false">
+                                    <!-- <i class="material-icons" style="vertical-align: middle;">{{item.vcIcono}}</i> <br> -->
+                                    <span class="align-middle">{{item.vcDesPresentacion}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="row" *ngIf="lstTipoSigno?.length > 2">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-light float-right"
+                    (click)="toggleVerMasTipoSigno()"><u>{{lblMasTipoSigno}}</u></button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"
+                *ngIf="objTipoSignoSeleccionado?.blDenominacion || objTipoSignoSeleccionado?.blPalFrase">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>
+
+                            <span *ngIf="objTipoSignoSeleccionado?.blDenominacion && nuIdTipoSolicitud!=2">
+                                {{objConfiguracion?.clValor1?.objSeccion3?.vcLblDenominacion}}
+                            </span>
+                            <span *ngIf="nuIdTipoSolicitud==2">
+                                {{objConfiguracion?.clValor1?.objSeccion3?.vcLblPalFrase}}
+                            </span>
+                            <app-tooltip
+                                [popDescripcion]="objTipoSignoSeleccionado?.blDenominacion ? objConfiguracion?.clValor1?.objSeccion3?.vcTooltipDenominacion : objConfiguracion?.clValor1?.objSeccion3?.vcTooltipPalFrase">
+                            </app-tooltip>
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" formControlName="vcDenominacion" maxlength="300">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row" *ngIf="objTipoSignoSeleccionado?.blAdjuntarFigura">
+                    <div class="col-md-12">
+                        <h4>
+                            {{objConfiguracion?.clValor1?.objSeccion3?.vcLblAdjuntar}} <app-tooltip
+                                [popDescripcion]="objConfiguracion?.clValor1?.objSeccion3?.vcTooltipAdjuntar">
+                            </app-tooltip>
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="btn btn-light btn-file" *ngIf="objConfigArchSigno.nuCantidadArchivos>lstArchivo.length">
+                            <i class="material-icons" style="vertical-align: middle;">add</i>
+                            <input type="file" (change)="cargarArchivoDatoSigno($event)" #input_archivo_dato_signo>
+                        </div>
+                        <table class="table table-sm" *ngIf="lstArchivo.length > 0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <!-- <th scope="col">Imagen</th> -->
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Tamaño</th>
+                                    <th scope="col">Opc.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of lstArchivo; let row = index">
+                                    <th scope="row">{{row + 1}}</th>
+                                    <!-- <td><img [src]="imgURL" height="30"></td> -->
+                                    <td>{{item.vcNomOriginal}}</td>
+                                    <td>{{item.nuLong}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" (click)="eliminarImagen(row)">
+                                            <i class="material-icons" style="vertical-align: middle;">delete_outline</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" *ngIf="objTipoSignoSeleccionado?.blReinvindicaColores">
+                    <div class="col-md-12">
+                        <h4>
+                            {{objConfiguracion?.clValor1?.objSeccion3?.vcLblReiCol}} <app-tooltip
+                                [popDescripcion]="objConfiguracion?.clValor1?.objSeccion3?.vcTooltipReiCol">
+                            </app-tooltip>
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="switch">
+                            <input type="checkbox" formControlName="blReinvindicaColor">
+                            <div class="slider round">
+                                <span class="on">SI</span><span class="off">NO</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

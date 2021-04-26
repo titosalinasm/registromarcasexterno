@@ -1,0 +1,45 @@
+.custom-pill{
+  padding: 8px 0px 0px 0px;
+  text-align: center;
+  width: 40px;
+  height: 30px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px 0px #e9ecef;
+}
+
+.custom-pill:hover{
+  cursor: pointer;
+  box-shadow: 0px 0px 3px 3px #e9ecef;
+}
+.custom-pill.first{
+  margin: 3px 3px 3px 0px;
+}
+.custom-pill.no-first{
+  margin: 3px;
+}
+
+.custom-pill.producto{
+  background-color: #01BDD5;
+}
+.custom-pill.servicio{
+  background-color: #2FCD00;
+}
+
+.custom-leyenda-pill {
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px 0px #e9ecef;
+  padding: 10px;
+}
+
+.custom-leyenda-pill:hover {
+  cursor: default;
+  /* box-shadow: 0px 0px 3px 3px #e9ecef; */
+}
+
+.custom-leyenda-pill.producto {
+  background-color: #01BDD5;
+}
+
+.custom-leyenda-pill.servicio {
+  background-color: #2FCD00;
+}

@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+
+._btnround {
+  border-radius: 24px;
+  padding: 8px 50px;
+}
+
+.btn._color-none {
+  background-color: transparent;
+  border-color: none;
+  /* box-shadow: 0 3px 6px 0 #ead790; */
+}
+
+._btnround._color-warning {
+  background-color: #fecb11;
+  border-color: #fecb11;
+  box-shadow: 0 3px 6px 0 #ead790;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  cursor: inherit;
+  display: block;
+}
+
+._message_error{
+  text-align: left;
+  /* border:  1px solid #a94442; */
+  margin-top: 5px;
+  font-size: .875rem;
+  /* border-left: 5px solid #a94442;  */
+  border-radius: 3px 3px 3px 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #a94442;
+  font-family: MontserratBold,Arial;
+  }
