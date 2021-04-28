@@ -40,27 +40,23 @@ export class RegistroComponent implements OnInit {
 
   public isInvalid: boolean = false;
   objConfiguracion: any = {};
+  vcManual : any;
 
   constructor(
     private globalService: GlobalService,
     private router: Router
-  ) { }
+  ) {
+    this.objConfiguracion=this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_P_001))[0];
+    this.vcManual = this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes('COD_MANUAL'))[0].vcValor1;
+  }
 
   ngOnInit() {
-    // this.objInfo = this.globalService.nroProceso == 1 ? CONSTANTES.info.obra_literaria : CONSTANTES.info.obra_artistica;
-
-
-    // let filter = this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_P_000));
-    // this.objConfiguracion = filter[0];
-
-
-    // this.vcTitulo = this.globalService.nroProceso == 1 ? 'OBRA LITERARIA' : 'OBRA ARTÍSTICA';
-    // this.vcImg = this.globalService.nroProceso == 1 ? 'obra-literaria' : 'obra-artistica';
-    // this.vcTituloObra = this.globalService.nroProceso == 1 ? 'literaria' : 'artística';
+    // console.log("configuracion: datos oninit: "+JSON.stringify(this.globalService.lstConfiguracion));
   }
 
   validEvent($event: any) {
     this.isInvalid = $event;
+
   }
 
   // spinnerEventHander($event: any) {
@@ -136,6 +132,9 @@ export class RegistroComponent implements OnInit {
         console.log('nuDestino: ' + nuDestino);
         this.appDatosSigno.siguiente();
         this.appClasificacionSigno.cargarDatos();
+        // console.log("Tipo solicitud: "+this.globalService.nuIdTipoSolicitud);
+        if(this.globalService.nuIdTipoSolicitud==2)
+        this.appDatosPersonales.cargarDatos();
         // this.isInvalid = true;
         break;
       case 3:
@@ -143,6 +142,10 @@ export class RegistroComponent implements OnInit {
         // this.isInvalid = false;
         this.appClasificacionSigno.siguiente();
         this.appPrioridadExtranjera.cargarDatos();
+
+        if(this.globalService.nuIdTipoSolicitud==3)
+        this.appDatosPersonales.cargarDatos();
+
         break;
       case 4:
         console.log('nuDestino: ' + nuDestino);

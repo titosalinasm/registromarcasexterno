@@ -14,6 +14,7 @@ export class TerminosComponent implements OnInit {
 
   objTerminos : any;
   vcManual : string;
+  objConfiguracion : any;
 
   constructor(
               private _consultaTerminosService : ConsultaTerminosService,
@@ -23,6 +24,8 @@ export class TerminosComponent implements OnInit {
               ) {
     this.doConsultaTerminos();
     this.doConfiguracion();
+    this.objConfiguracion=this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_P_001))[0];
+    // this.vcManual = this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes('COD_MANUAL'))[0].vcValor1;
    }
 
   ngOnInit(): void {

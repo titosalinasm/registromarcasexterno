@@ -54,37 +54,41 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-inline">
-                  <label >Pará usarse como complemento del signo registrado con certificado Nro:
+                  <label>Pará usarse como complemento del signo registrado con certificado Nro:
                      <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03">
                      </app-tooltip>
                     </label>
-                  <input *ngIf="!blReqCerLema" type="text" class="form-control" formControlName="vcCertificadoLema" maxlength="12">
-                  <span *ngIf="blReqCerLema">{{datosSignoForm.value.vcCertificadoLema}}</span>
+                  <input *ngIf="!blReqCerLema" type="text" class="form-control"
+                  formControlName="vcCertificadoLema" maxlength="12" (keypress)="doValidaLetrasNumeros($event)">
                   <button *ngIf="!blReqCerLema"  style="margin-left: 5px;" type="button" class="btn btn-warning"
                   (click)="doValidarCertificadoLema()"><span class="material-icons">
                     search
                     </span></button>
+                    <span *ngIf="blReqCerLema">{{datosSignoForm.value.vcCertificadoLema}}</span>
+                    <div class="_message_error" *ngIf="!blReqCerLema">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese y valide número de certificado
+                    </div>
                   <button *ngIf="blReqCerLema"  style="margin-left: 5px;" type="button"
                   class="btn btn-danger" (click)="doEliminarCertificadoLema()">
-                  <span class="material-icons">
-                    delete_outline
-                    </span></button>
+                  <i class="fa fa-times" aria-hidden="true"></i></button>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-inline">
-                  <label >Para usarse como complemento del signo solicitado con expediente::  <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03"> </app-tooltip></label>
-                  <input *ngIf="!blReqNroExpeLema" type="text" class="form-control" formControlName="vcNroExpedienteLema" maxlength="12">
+                  <label >Para usarse como complemento del signo solicitado con expediente:  <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03"> </app-tooltip></label>
+                  <input *ngIf="!blReqNroExpeLema" (keypress)="doValidaLetrasNumeros($event)"
+                   type="text" class="form-control" formControlName="vcNroExpedienteLema" maxlength="12">
                   <button *ngIf="!blReqNroExpeLema" style="margin-left: 5px;" type="button" class="btn btn-warning"
                    (click)="doValidarExpedienteLema()"><span class="material-icons">
                     search
                     </span></button>
                     <span *ngIf="blReqNroExpeLema">{{datosSignoForm.value.vcNroExpedienteLema}}</span>
+                    <div class="_message_error" *ngIf="!blReqNroExpeLema">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese y valide número de expediente
+                    </div>
                     <button *ngIf="blReqNroExpeLema"  style="margin-left: 5px;" type="button"
                   class="btn btn-danger" (click)="doEliminarNroExpedienteLema()">
-                  <span class="material-icons">
-                    delete_outline
-                    </span></button>
+                  <i class="fa fa-times" aria-hidden="true"></i></button>
                   </div>
               </div>
             </div>
@@ -94,7 +98,9 @@
                   <label >La clase del signo o marca a complementar: <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03">
                   </app-tooltip> </label>
                   <input style="width: 150px;"  type="text" class="form-control"
-                  formControlName="nuClaseLema"  min="1" max="45" (keypress)="numericOnly($event)"  (keyup)="numeroClase()" maxlength="2">
+                  formControlName="nuClaseLema"  min="1" max="45" (keypress)="numericOnly($event)"
+                  (keyup)="numeroClase()"
+                  maxlength="2">
                   </div>
                 </div>
               </div>
@@ -108,7 +114,12 @@
           <div class="form-group">
             <label>Fecha de primer uso:</label>
             <input type="text" class="form-control"
+                    [minDate]="minDate"
+                    [maxDate]="maxDate"
                     formControlName="vcFechaPrimerUsoNombreComercial" bsDatepicker readonly>
+            <div class="_message_error" *ngIf="datosSignoForm.value.vcFechaPrimerUsoNombreComercial==''">
+                      <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese fecha de primer uso
+            </div>
           </div>
           </div>
           <div class="col-md-6">
@@ -119,25 +130,27 @@
                 <input type="file" (change)="cargarArchivoDatoRequisito($event, 5)" #input_archivo>
               </div>
               <span *ngIf="vcDocPrimerUso!=null"><b> {{vcDocPrimerUso}}</b></span>
+              <button  *ngIf="vcDocPrimerUso!=null" style="margin-left: 5px;" type="button"
+              class="btn btn-danger" (click)="doEliminarDocRequisiro(5)">
+              <i class="fa fa-times" aria-hidden="true" ></i></button>
             </div>
          </div>
         </div>
         <div class="row">
           <div class="col-md-6">
             <div class="form-inline">
-              <label >Para usarse como complemento del signo solicitado con expediente::  <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03"> </app-tooltip></label>
+              <label >Para usarse como complemento del signo solicitado con expediente:  <app-tooltip [popDescripcion]="objConfiguracion?.clValor1?.objSeccion2?.vcTooltip03"> </app-tooltip></label>
               <input *ngIf="!blReqNroExpeNombComercial" type="text" class="form-control"
-              formControlName="vcNroExpedienteNombreComercial" maxlength="12">
+              formControlName="vcNroExpedienteNombreComercial" maxlength="12" (keypress)="doValidaLetrasNumeros($event)">
               <button *ngIf="!blReqNroExpeNombComercial" style="margin-left: 5px;" type="button" class="btn btn-warning"
                (click)="doValidarExpedienteNombreComercial()"><span class="material-icons">
                 search
                 </span></button>
                 <span *ngIf="blReqNroExpeNombComercial">{{datosSignoForm.value.vcNroExpedienteNombreComercial}}</span>
+
                 <button *ngIf="blReqNroExpeNombComercial"  style="margin-left: 5px;" type="button"
               class="btn btn-danger" (click)="doEliminarNroExpedienteNombreComercial()">
-              <span class="material-icons">
-                delete_outline
-                </span></button>
+              <i class="fa fa-times" aria-hidden="true"></i></button>
               </div>
           </div>
         </div>
@@ -151,6 +164,9 @@
               <input type="file" (change)="cargarArchivoDatoRequisito($event, 6)" #input_archivo>
             </div>
             <span *ngIf="vcDocReglamento!=null"><b> {{vcDocReglamento}}</b></span>
+            <button  *ngIf="vcDocReglamento!=null" style="margin-left: 5px;" type="button"
+            class="btn btn-danger" (click)="doEliminarDocRequisiro(6)">
+            <i class="fa fa-times" aria-hidden="true" ></i></button>
           </div>
           <div class="col-md-12" *ngIf="nuIdTipoSolicitud==4">
             <label  >Copia de los estatutos del solicitante: </label>
@@ -159,6 +175,9 @@
               <input type="file" (change)="cargarArchivoDatoRequisito($event, 7)" #input_archivo>
              </div>
              <span *ngIf="vcDocEstatuto!=null"><b> {{vcDocEstatuto}}</b></span>
+             <button  *ngIf="vcDocEstatuto!=null" style="margin-left: 5px;" type="button"
+             class="btn btn-danger" (click)="doEliminarDocRequisiro(7)">
+             <i class="fa fa-times" aria-hidden="true" ></i></button>
           </div>
           <div class="col-md-12" *ngIf="nuIdTipoSolicitud==4">
             <label >Lista de integrantes: </label>
@@ -167,6 +186,9 @@
               <input type="file" (change)="cargarArchivoDatoRequisito($event, 8)" #input_archivo>
             </div>
             <span *ngIf="vcDocLista!=null"><b> {{vcDocLista}}</b></span>
+            <button  *ngIf="vcDocLista!=null" style="margin-left: 5px;" type="button"
+             class="btn btn-danger" (click)="doEliminarDocRequisiro(8)">
+             <i class="fa fa-times" aria-hidden="true" ></i></button>
           </div>
         </div>
 
@@ -197,7 +219,8 @@
                 <h5 style="font-weight: normal;">{{objConfiguracion?.clValor1?.objSeccion2?.vcLbl02}} </h5>
             </div>
             <div class="col-md-3" *ngIf="nuIdTipoSolicitud!=2">
-                <input  type="text" *ngIf="!lblValidExpediente && !btnValidoExpediente" class="form-control" formControlName="vcNroExpediente" maxlength="12">
+                <input  type="text" *ngIf="!lblValidExpediente && !btnValidoExpediente" (keypress)="doValidaLetrasNumeros($event)"
+                class="form-control" formControlName="vcNroExpediente" maxlength="12">
                 <span *ngIf="btnValidoExpediente" >{{datosSignoForm.value.vcNroExpediente}}</span>
 
                 <div class="_message_error" *ngIf="btnValidExpediente && !btnValidoExpediente">
@@ -215,9 +238,7 @@
 
               <button *ngIf="btnValidoExpediente"  style="margin-left: 5px;" type="button"
               class="btn btn-danger" (click)="doEliminarExpediente()">
-              <span class="material-icons">
-                delete_outline
-                </span></button>
+              <i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
         </div>
         <div class="row" *ngIf="nuIdTipoSolicitud!=3">
@@ -238,10 +259,13 @@
                 <h5 style="font-weight: normal;">{{objConfiguracion?.clValor1?.objSeccion2?.vcLbl04}} </h5>
             </div>
             <div class="col-md-3">
-                <input type="text" *ngIf="!lblValidCertificado && !btnValidoCertificado" class="form-control" formControlName="vcNroCertificado" maxlength="12">
+                <input type="text" *ngIf="!lblValidCertificado && !btnValidoCertificado"
+                (keypress)="doValidaLetrasNumeros($event)"
+                 class="form-control"
+                 formControlName="vcNroCertificado" maxlength="12">
                 <span *ngIf="btnValidoCertificado" >{{datosSignoForm.value.vcNroCertificado}}</span>
                 <div class="_message_error" *ngIf="btnValidCertificado && !btnValidoCertificado">
-                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese número de certificado
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese y valide número de certificado
                 </div>
             </div>
             <div class="col-md-3" *ngIf="btnValidCertificado">
@@ -255,9 +279,7 @@
 
               <button *ngIf="btnValidoCertificado"  style="margin-left: 5px;" type="button"
               class="btn btn-danger" (click)="doEliminarCertificado()">
-              <span class="material-icons">
-                delete_outline
-                </span></button>
+              <i class="fa fa-times" aria-hidden="true"></i></button>
 
             </div>
         </div>
@@ -313,7 +335,14 @@
                         </h4>
                     </div>
                     <div class="col-md-12">
-                        <input type="text" class="form-control" formControlName="vcDenominacion" maxlength="300">
+                        <input type="text" (keypress)="doValidaLetrasNumeros($event)"
+                        class="form-control" formControlName="vcDenominacion" maxlength="300">
+                        <div class="_message_error" *ngIf="datosSignoForm.value.vcDenominacion<2 && nuIdTipoSolicitud!=2">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese denominación
+                        </div>
+                        <div class="_message_error" *ngIf="datosSignoForm.value.vcDenominacion<2 && nuIdTipoSolicitud==2">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese palabra o frase
+                        </div>
                     </div>
                 </div>
             </div>

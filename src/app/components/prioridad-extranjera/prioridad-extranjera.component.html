@@ -139,50 +139,71 @@
                 <div class="form-group row" *ngIf="blShowClase">
                     <label for="nu-id-clase" class="col-sm-5 col-form-label">Clase:</label>
                     <div class="col-sm-7">
-                        <select class="custom-select" id="nu-id-clase"
-                            [ngClass]="{'is-invalid': (agregarPrioridadForm.controls.nuIdClase.invalid && (agregarPrioridadForm.controls.nuIdClase.dirty || agregarPrioridadForm.controls.nuIdClase.touched))}"
+                        <select class="form-control" id="nu-id-clase"
                             formControlName="nuIdClase">
+                            <option [ngValue]="null" disabled selected hidden>Seleccione...</option>
                             <option *ngFor="let item of lstClases; let row = index" [ngValue]="item.nuIdClase">
                                 {{item.nuIdClase}}</option>
-                            <!-- <option [ngValue]="2">6</option>
-                            <option [ngValue]="3">7</option> -->
                         </select>
+                        <div class="_message_error" *ngIf="agregarPrioridadForm.value.nuIdClase==null">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) seleccione número clase
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="vc-nro-solicitud" class="col-sm-5 col-form-label">N° Solicitud:</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="vc-nro-solicitud" formControlName="vcNroSolicitud">
-                    </div>
+                        <input type="text" class="form-control" id="vc-nro-solicitud"
+                         formControlName="vcNroSolicitud">
+                        <div class="_message_error" *ngIf="agregarPrioridadForm.value.vcNroSolicitud==null || agregarPrioridadForm.value.vcNroSolicitud==''">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese número de solicitud
+                        </div>
+                      </div>
                 </div>
                 <div class="form-group row">
                     <label for="dt-fecha-prioridad" class="col-sm-5 col-form-label">Fecha de la prioridad:</label>
                     <div class="col-sm-7">
                         <input type="text" id="dt-fecha-prioridad" class="form-control"
-                            formControlName="vcFechaPrioridad" bsDatepicker readonly>
+                            formControlName="vcFechaPrioridad"
+                            [minDate]="minDate"
+                            [maxDate]="maxDate"
+                            bsDatepicker readonly>
+                            <div class="_message_error" *ngIf="agregarPrioridadForm.value.vcFechaPrioridad==null">
+                              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) seleccione fecha de prioridad
+                            </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="nu-pais-prioridad" class="col-sm-5 col-form-label">País de prioridad:</label>
                     <div class="col-sm-7">
-                        <select class="custom-select" id="nu-pais-prioridad"
-                            [ngClass]="{'is-invalid': (agregarPrioridadForm.controls.nuPaisPrioridad.invalid && (agregarPrioridadForm.controls.nuPaisPrioridad.dirty || agregarPrioridadForm.controls.nuPaisPrioridad.touched))}"
+                        <select class="form-control" id="nu-pais-prioridad"
                             formControlName="nuPaisPrioridad">
+                            <option [ngValue]="null" disabled selected hidden>Seleccione...</option>
                             <option *ngFor="let item of lstPaises; let row = index" [ngValue]="item.nuIdUbigeoPais">
                                 {{item.vcPais}}</option>
                         </select>
+                        <div class="_message_error" *ngIf="agregarPrioridadForm.value.nuPaisPrioridad==null">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) seleccione país de la prioridad
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="nu-id-tipo-prioridad" class="col-sm-5 col-form-label">Tipo de prioridad:</label>
                     <div class="col-sm-7">
-                        <select class="custom-select" id="nu-id-tipo-prioridad"
-                            [ngClass]="{'is-invalid': (agregarPrioridadForm.controls.nuIdClase.invalid && (agregarPrioridadForm.controls.nuIdClase.dirty || agregarPrioridadForm.controls.nuIdClase.touched))}"
-                            formControlName="nuIdTipoPrioridad">
+                        <select class="form-control"
+                         id="nu-id-tipo-prioridad"
+                            formControlName="nuIdTipoPrioridad"
+                            *ngIf="!blCboTipoPrioridad"
+                            >
+                            <option [ngValue]="null" disabled selected hidden>Seleccione...</option>
                             <option *ngFor="let item of lstTipoPrioridad; let row = index"
                                 [ngValue]="item.nuIdPrioridad">{{item.vcDescripcion}}
                             </option>
                         </select>
+                        <span *ngIf="blCboTipoPrioridad">Todos</span>
+                        <div class="_message_error" *ngIf="agregarPrioridadForm.value.nuIdTipoPrioridad==null || agregarPrioridadForm.value.nuIdTipoPrioridad==''">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) seleccione tipo de prioridad
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row" *ngIf="blShowProductoServicio">
@@ -191,6 +212,10 @@
                     <div class="col-sm-7">
                         <textarea class="form-control" id="vc-productos-servicios"
                             formControlName="vcProductosServicios"></textarea>
+                            <div class="_message_error" *ngIf="agregarPrioridadForm.value.vcProductosServicios==null || agregarPrioridadForm.value.vcProductosServicios==''">
+                              <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese producto(s) y/o
+                              servicio(s)
+                            </div>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -227,6 +252,10 @@
                         <div class="btn btn-light btn-file" *ngIf="objConfigArchPrioridad.nuCantidadArchivos>lstArchivo.length">
                             <i class="material-icons" style="vertical-align: middle;">add</i> Agregar documento
                             <input type="file" (change)="cargarArchivoPrioridad($event)" #input_archivo_prioridad>
+
+                        </div>
+                        <div class="_message_error" *ngIf="lstArchivo.length < 1">
+                          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) adjunta al menos un documento
                         </div>
                     </div>
                 </div>
@@ -237,9 +266,10 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success btn-block" (click)="agregarPrioridad()">
+        <button type="button" [disabled]="!validModal" class="btn btn-success btn-block"
+        (click)="agregarPrioridad()">
             <i class="material-icons align-middle">done</i>
-            Aceptar
+            Agregar
         </button>
     </div>
 </ng-template>

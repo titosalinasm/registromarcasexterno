@@ -107,9 +107,6 @@ export class InicioComponent implements OnInit {
         this._spinner.hide();
 
         this.cargarDatosSel();
-
-
-
       },
       error => {
         this.spinner = false;
@@ -126,7 +123,7 @@ export class InicioComponent implements OnInit {
           // this.globalService.codUsuarioSel = params['username'];
           this.globalService.codUsuarioSel = '46678997'
           // TODO: comentar para producción
-           sessionStorage.setItem('access_token', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhcHBEU0RSZW5vdmFjaW9uIiwic2NvcGUiOlsic2VsIl0sIm9yZ2FuaXphdGlvbiI6IkluZGVjb3BpIiwiZXhwIjoxNjE5NTExMjA5LCJhdXRob3JpdGllcyI6WyJTRUxfUkVOT1ZBQ0lPTiJdLCJqdGkiOiIxZjU3YjNlYy0wMjA0LTRiNjAtOWNhZS04YjdmNzBjNWJhYWIiLCJjbGllbnRfaWQiOiJzZWwiLCJ1c2VybmFtZSI6ImFwcERTRFJlbm92YWNpb24ifQ.LfsGLGkPBmn9bzdnnv5FqL2sSNOVUQZDJZ1Gg63-FNjsI9zvgMAvrMeEpJZDLrS0q96DDWVTos1Rzp8uWrLp4g4yRVD6ZYoXgGCy3iONniTaSYhPH8FpYjgxV_e-j1nJztwNLQJfhiqwaEdLArc1wmNsahtLRrwHuU3ps-FjK8Ty_Iocn9sWaYFQ-rj2Ocfvck6wzyWgm-woYj1a-yBoA-5A9k-TmVv8xngs-vjp1wgKs2JPbS-kNt-RA8RkTiCXsFCSEQM6NtpC4UEM_ZrgnkuAOpqGm3IPiR0qaHX5iZW6hLru6D_dO5X6uONRzOleWa1_B0TR8fM4NCImLTh7_A');
+           sessionStorage.setItem('access_token', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhcHBEU0RSZW5vdmFjaW9uIiwic2NvcGUiOlsic2VsIl0sIm9yZ2FuaXphdGlvbiI6IkluZGVjb3BpIiwiZXhwIjoxNjE5NTc2NjY5LCJhdXRob3JpdGllcyI6WyJTRUxfUkVOT1ZBQ0lPTiJdLCJqdGkiOiJlMGJiNDYxYy05N2YzLTQyZGUtYjJiYi00ZDIxYTA4NTgwMGIiLCJjbGllbnRfaWQiOiJzZWwiLCJ1c2VybmFtZSI6ImFwcERTRFJlbm92YWNpb24ifQ.aBe2ujxjWec2zWu0OBVRzNz4lDoFsBWgSSB_QhXexDymCtoruNK2TbgapBNqdyKGaXldsamuU2ff-BnX4y-aM8tWB22_L5R7VrVcbybUeylFYv9N_VXkN-B993bSOhPheALtBkPwbnw3zNanWfLRDwXxEkcqTN-jlUuwU6UaPNIzJhC5NJY2gwbvMiBcUsIVa-PpAHQOa_tg24_QYhzBsh9pYm7ZmGkYEkIFjOJpXPSFgpP9pdhUD-g9NFTohopb-ASrMrVTHupveuZNKE_dPy1XxGPM8Afs2iA-bLzZ1-b3BBpF1o8Hff7erbdkPdMmC74qkN0SWOVCT1rJYv2o4w');
           //sessionStorage.setItem('access_token', '' + params['access_token']);
                    this.globalService.codAccessToken = params['access_token'];
 

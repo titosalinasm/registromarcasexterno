@@ -1,10 +1,9 @@
-<div class="container-fluid d-print-none d-none d-xl-block">
+<div class="container-fluid d-print-none d-none d-xl-block" *ngIf="nuIdTipoSolicitud!=4">
     <div class="row float-right">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <table class="table table-sm">
-                        <!-- <caption>List of users</caption> -->
                         <thead>
                             <tr class="bg-warning">
                                 <th scope="col" colspan="2">Resumen de pago</th>
@@ -51,83 +50,16 @@
         <div class="col-md-12">
             <div>
                 <tabset>
-                    <!-- <tab heading="Por clase"> -->
                     <tab heading="Por Clase" class="pt-3">
                         <span class="badge badge-pill badge-primary no-first custom-pill"
                             *ngFor="let item of lstTitulosNiza; let row = index"
                             [ngClass]="(row>33)?'servicio':'producto'" popover="{{item.vcProductosServicios}}"
                             triggers="mouseenter:mouseleave" placement="bottom"
                             (click)="agregarClaseNiza(item, true)">{{item.nuIdClase}}</span>
-                        <!-- <small class="text-muted">1. Agregue la(s) clase(s) niza sobre las que desea hacer su
-                                búsqueda.</small> -->
-                        <!-- <div class="card"> -->
-                        <!-- <div class="card-body text-center"> -->
-                        <!-- <span class="badge badge-pill badge-primary no-first custom-pill"
-                                        *ngFor="let item of lstTitulosNiza; let row = index"
-                                        [ngClass]="(row>33)?'servicio':'producto'"
-                                        tooltip="{{item.vc_productos_servicios}}" placement="bottom"
-                                        (click)="agregarClaseNiza(item, true)">{{item.vc_clase}}</span> -->
-                        <!-- seleccionaClaseNiza -->
-                        <!-- </div> -->
-                        <!-- <div class="card-body mt-n4"> -->
                         <div class="container-fluid">
-                            <!-- <div class="row text-center mb-3">
-                                    <small class="text-muted">También puede usar los siguientes botones para buscar en
-                                      todas
-                                      clases de producto o servicio</small>
-                                  </div> -->
-                            <!-- <div class="row mb-3"> -->
-                            <!-- <div class="col text-center p-1">
-                                      <button type="button" class="btn btn-primary" (click)="agregarProductosAll()"
-                                        style="color: #fff; background-color: #01BDD5; border-color: #01BDD5;">Agregar todas las
-                                        clases</button> -->
-                            <!-- <span class="badge badge-pill badge-primary custom-leyenda-pill producto">Agregar todas las clases</span> -->
-                            <!--  de productos -->
-                            <!-- </div> -->
-                            <!-- <div class=".d-block .d-sm-none p-1"></div> -->
-                            <!-- <div class="col text-center p-1">
-                                      <button type="button" class="btn btn-primary" (click)="agregarServiciosAll()"
-                                        style="color: #fff; background-color: #2FCD00; border-color: #2FCD00;">Agregar todas las
-                                        clases</button> -->
-                            <!-- <span class="badge badge-pill badge-primary custom-leyenda-pill servicio">Agregar todas las clases</span> -->
-                            <!--  de servicios -->
-                            <!-- </div> -->
-                            <!-- </div> -->
-                            <!-- <hr>
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-6 pt-2">
-                                                <small class="text-muted">Las clases niza están agrupadas por los
-                                                    colores:</small>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-3 p-1 text-center">
-                                                <span
-                                                    class="badge badge-pill badge-primary custom-leyenda-pill producto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                <small class="text-muted ml-3">Producto</small>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-3 p-1 text-center">
-                                                <span
-                                                    class="badge badge-pill badge-primary custom-leyenda-pill servicio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                <small class="text-muted ml-3">Servicio</small>
-                                            </div>
-                                        </div> -->
                         </div>
-                        <!-- </div> -->
-
-                        <!-- <br> -->
-                        <!-- <div class="container">
-                                
-                              </div> -->
-                        <!-- Leyenda -->
-                        <!-- <br> -->
-                        <!-- <div class="container-fluid"> -->
-
-                        <!-- </div> -->
-                        <!-- <br> -->
-                        <!-- </div> -->
                     </tab>
-                    <!-- </tab> -->
                     <tab heading="Por tipo de producto" class="pt-3">
-                        <!-- buscar producto -->
                         <form [formGroup]="claseNizaForm">
                             <div class="row mb-3">
                                 <div class="col-sm-12">
@@ -137,7 +69,6 @@
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-success" type="button" id="button-addon2"
                                                 [disabled]="claseNizaForm.invalid" (click)="buscarDescripcionNiza()">
-                                                <!-- <i class="fa fa-search"></i> -->
                                                 <i class="material-icons" style="vertical-align: middle;">search</i>
                                             </button>
                                         </div>
@@ -151,7 +82,6 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">Clase Niza</th>
-                                            <!-- <th scope="col">Productos y Servicios NCL(11-2017)</th> -->
                                             <th scope="col">Productos y/o Servicios</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -163,9 +93,7 @@
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-light"
                                                     (click)="agregarClaseNiza(item, true)">
-                                                    <!-- (click)="agregarClaseNiza(item, true)" -->
                                                     <span style="font-size: 1em; color: green;">
-                                                        <!-- <i class="fas fa-plus"></i> -->
                                                         <i class="material-icons"
                                                             style="vertical-align: middle;">add</i>
                                                     </span>
@@ -176,7 +104,6 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- *ngIf="lstClasesNizaSearch.length > 0" -->
                         <div class="row" *ngIf="lstClasesNizaSearch.length > 5">
                             <div class="col-sm-12">
                                 <pagination [totalItems]="lstClasesNizaSearch.length" [boundaryLinks]="true"
@@ -218,25 +145,27 @@
         <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table">
-                    <!-- <caption>List of users</caption> -->
                     <thead>
                         <tr>
                             <th scope="col">Clase</th>
                             <th scope="col">Productos y/o Servicios</th>
-                            <th scope="col">Opc.</th>
-                            <!-- <th scope="col">Handle</th> -->
+                            <th scope="col">Edit.</th>
+                            <th scope="col">Elim.</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of lstClasesNizaSeleccionadasFilter">
+                        <tr *ngFor="let item of lstClasesNizaSeleccionadasFilter; let row=index;">
                             <th scope="row">{{item.nuIdClase}}</th>
                             <td>{{item.vcProductosServicios}}</td>
                             <td class="text-center">
+                              <button type="button" class="btn btn-light"
+                              (click)="doEditarClase(item, row)">
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+                            </button>
+                            </td>
+                            <td class="text-center">
                                 <button type="button" class="btn btn-light" (click)="eliminarClaseNiza(item)">
-                                    <span style="font-size: 1em; color: red;">
-                                        <!-- <i class="fas fa-trash"></i> -->
-                                        <i class="material-icons" style="vertical-align: middle;">delete</i>
-                                    </span>
+                                  <i class="fa fa-times" aria-hidden="true"></i>
                                 </button>
                             </td>
                         </tr>
@@ -255,7 +184,7 @@
         </div>
     </div>
     <hr>
-    <div class="row">
+    <div class="row" *ngIf="nuIdTipoSolicitud!=4">
         <div class="col-md-10">
             <p class="mb-0">La primera clase de niza tendrá un costo de:</p>
         </div>
@@ -263,7 +192,7 @@
             <span class="text-danger">{{vcImporteClaseNizaPrincipal}}</span>
         </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="nuIdTipoSolicitud!=4">
         <div class="col-md-10">
             <p class="mb-0">A partir de la segunda clase de niza tendrá un costo de:</p>
         </div>
@@ -272,3 +201,30 @@
         </div>
     </div>
 </div>
+
+<!-- Modal agregar prioridad -->
+<ng-template #templateEditarClase>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">Editar clase {{vcNroClaseEditadaView}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <div class="container-fluid">
+        <form [formGroup]="formClaseEditada" autocomplete="off">
+          <textarea class="form-control" formControlName="vcClaseEditada"
+          rows="5"></textarea>
+        </form>
+
+      </div>
+  </div>
+  <div class="modal-footer">
+      <button type="button" (click)="doGuardarEditado()" class="btn btn-success btn-block"
+      [disabled]="formClaseEditada.value.vcClaseEditada.length<4">
+          <i class="material-icons align-middle">done</i>
+          Guardar
+      </button>
+  </div>
+</ng-template>
+<!-- Modal agregar prioridad -->

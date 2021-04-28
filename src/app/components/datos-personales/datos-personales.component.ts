@@ -194,10 +194,6 @@ export class DatosPersonalesComponent implements OnInit {
 
   ngOnInit() {
     console.log('DatosPersonalesComponent');
-    // /*OFT<*/
-    // this.obtenerParametrosURL();
-    // this.cargarConfiguracion();
-    // /*OFT>*/
   }
 
   /*OFT<*/
@@ -266,7 +262,7 @@ export class DatosPersonalesComponent implements OnInit {
       // this.nuIdTipoDocumento = this.globalService.dataUsuarioSel.nuIdTipoOrigen == 2 ? null : this.globalService.dataUsuarioSel.nuIdTipoDocumento;
       this.objConfigArchRepresentante=this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_CONF_ARCHIVO))[0].clValor1.objConfigArchRepresentante;
       console.log("configuracion: archivos: "+JSON.stringify(this.objConfigArchRepresentante))
-  
+
       this.bindEventsForm();
       this.personaInicial();
       this.blcargarDatos = false;
@@ -1794,7 +1790,17 @@ export class DatosPersonalesComponent implements OnInit {
 
   atras() {
     console.log('navegacionAtras');
-    this.propagar.emit(4);
+    if(this.globalService.nuIdTipoSolicitud==2){
+    this.propagar.emit(2);
+    }
+    else{
+      if(this.globalService.nuIdTipoSolicitud==3){
+        this.propagar.emit(3);
+      }else{
+        this.propagar.emit(4);
+      }
+
+    }
   }
 
   siguiente() {

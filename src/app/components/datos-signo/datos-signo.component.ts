@@ -7,6 +7,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ValidaExpedienteService } from 'src/app/services/valida-expediente.service';
 import { ValidaCertificadoService } from 'src/app/services/valida-certificado.service';
+import { copyFileSync } from 'node:fs';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 @Component({
   selector: 'app-datos-signo',
   templateUrl: './datos-signo.component.html',
@@ -76,12 +78,15 @@ export class DatosSignoComponent implements OnInit {
     vcDenominacion: ['',],
     blReinvindicaColor: ['',],
 
-    vcCertificadoLema: ['',],
-    vcNroExpedienteLema: ['',],
+    vcCertificadoLema: ['P00299285',],
+    vcNroExpedienteLema: ['874892-2021',],
     nuClaseLema: ['',],
     vcNroExpedienteNombreComercial:['',],
     vcFechaPrimerUsoNombreComercial: ['',],
   });
+
+  minDate: Date;
+  maxDate: Date;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -91,7 +96,14 @@ export class DatosSignoComponent implements OnInit {
     private toastr: ToastrService,
     private _validaExpedienteService: ValidaExpedienteService,
     private _validaCertificadoService : ValidaCertificadoService,
-  ) { }
+    private localeService: BsLocaleService,
+  ) {
+    this.localeService.use('es');
+    this.minDate = new Date();
+    this.maxDate = new Date();
+    this.minDate.setDate(this.minDate.getDate() - 61);
+    this.maxDate.setDate(this.maxDate.getDate()-1);
+   }
 
   ngOnInit() {
     console.log('DatosSignoComponent');
@@ -99,9 +111,33 @@ export class DatosSignoComponent implements OnInit {
     // this.bindEventsForm();
   }
 
+  doEliminarDocRequisiro(nuTipoArchivo){
+    switch(nuTipoArchivo){
+      case 5:
+      this.vcDocPrimerUso= null;
+      break;
+      case 6:
+        this.vcDocReglamento= null;
+      break;
+      case 7:
+        this.vcDocEstatuto= null;
+      break;
+      case 8:
+        this.vcDocLista= null;
+      break;
+      default:
+      break;
+  }
+    console.log("ANTES : "+JSON.stringify(this.lstArchivoDocumentos));
+    this.lstArchivoDocumentos=this.lstArchivoDocumentos.filter(e => e.nuIdTipoArchivo!=nuTipoArchivo);
+  console.log("DESPUES: "+JSON.stringify(this.lstArchivoDocumentos));
+  }
+
+
   doEliminarExpediente(){
     this.btnValidoExpediente=false;
     this.datosSignoForm.get('vcNroExpediente').setValue('');
+    this.validarFormulario();
   }
 
   doValidarExpediente(){
@@ -117,16 +153,20 @@ export class DatosSignoComponent implements OnInit {
         else
         this.toastr.error('Número de expediente inválido', 'Error');
 
+        this.validarFormulario();
+
         // console.log(JSON.stringify(resp))
       },
       error=>{
         this._spinner.hide();
+        this.validarFormulario();
       }
     );
   }
   doEliminarNroExpedienteNombreComercial(){
-    this.blReqNroExpeLema=false;
+    this.blReqNroExpeNombComercial=false;
     this.datosSignoForm.get('vcNroExpedienteNombreComercial').setValue('');
+    this.validarFormulario();
     }
 
   doValidarExpedienteNombreComercial(){
@@ -142,10 +182,13 @@ export class DatosSignoComponent implements OnInit {
         else
         this.toastr.error('Número de expediente inválido', 'Error');
 
+        this.validarFormulario();
+
         // console.log(JSON.stringify(resp))
       },
       error=>{
         this._spinner.hide();
+        this.validarFormulario();
       }
     );
   }
@@ -153,6 +196,7 @@ export class DatosSignoComponent implements OnInit {
   doEliminarNroExpedienteLema(){
     this.blReqNroExpeLema=false;
     this.datosSignoForm.get('vcNroExpedienteNombreComercial').setValue('');
+    this.validarFormulario();
     }
 
   doValidarExpedienteLema(){
@@ -168,10 +212,13 @@ export class DatosSignoComponent implements OnInit {
         else
         this.toastr.error('Número de expediente inválido', 'Error');
 
+        this.validarFormulario();
+
         // console.log(JSON.stringify(resp))
       },
       error=>{
         this._spinner.hide();
+        this.validarFormulario();
       }
     );
   }
@@ -179,6 +226,7 @@ export class DatosSignoComponent implements OnInit {
   doEliminarCertificadoLema(){
   this.blReqCerLema=false;
   this.datosSignoForm.get('vcCertificadoLema').setValue('');
+  this.validarFormulario();
   }
   doValidarCertificadoLema(){
     this._spinner.show();
@@ -194,16 +242,20 @@ export class DatosSignoComponent implements OnInit {
         else
         this.toastr.error('Número de certificado inválido', 'Error');
 
+        this.validarFormulario();
+
         // console.log(JSON.stringify(resp))
       },
       error=>{
         this._spinner.hide();
+        this.validarFormulario();
       }
     );
   }
   doEliminarCertificado(){
     this.btnValidoCertificado=false;
     this.datosSignoForm.controls.vcNroCertificado.setValue('');
+    this.validarFormulario();
   }
   doValidarCertificado(){
     this._spinner.show();
@@ -218,10 +270,14 @@ export class DatosSignoComponent implements OnInit {
         else
         this.toastr.error('Número de certificado inválido', 'Error');
 
+        this.validarFormulario();
+
         // console.log(JSON.stringify(resp))
       },
       error=>{
         this._spinner.hide();
+
+        this.validarFormulario();
       }
     );
   }
@@ -314,6 +370,23 @@ export class DatosSignoComponent implements OnInit {
     this.vcDocEstatuto=null;
     this.vcDocLista =null;
     this.lstArchivoDocumentos=[];
+    this.datosSignoForm.controls.blInteresReal.setValue(false);
+    this.datosSignoForm.controls.blDerechoPreferente.setValue(false);
+    this.btnValidCertificado=false;
+    this.lblValidCertificado=false;
+    this.btnValidExpediente=false;
+    this.lblValidExpediente=false;
+
+    this.blReqCerLema=false;
+    this.blReqNroExpeLema=false;
+    this.datosSignoForm.controls.nuClaseLema.setValue(null);
+    this.datosSignoForm.controls.vcFechaPrimerUsoNombreComercial.setValue(null);
+    this.blReqNroExpeNombComercial=false;
+
+    this.datosSignoForm.controls.vcCertificadoLema.setValue(null);
+    this.datosSignoForm.controls.vcNroExpedienteLema.setValue(null);
+    this.datosSignoForm.controls.vcDenominacion.setValue(null);
+
 
     this.bindEventsForm();
 
@@ -545,7 +618,7 @@ export class DatosSignoComponent implements OnInit {
   }
 
   validarFormulario() {
-    console.log("validarFormulario");
+    console.log("validarFormulario ");
     // this.datosSignoForm.controls.vcNroExpediente.disable();
     // this.datosSignoForm.controls.vcNroCertificado.disable();
     this.isInvalid=true;
@@ -571,11 +644,43 @@ export class DatosSignoComponent implements OnInit {
 
 
     if(this.objTipoSignoSeleccionado.nuIdTipoPresentacion>2){
-      if(this.lstArchivo.length>0 && this.datosSignoForm.get('vcDenominacion').value!=''){
+      if(this.nuIdTipoSolicitud==3){
+      if(this.lstArchivo.length>0 && this.datosSignoForm.get('vcDenominacion').value!='' && this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial!=''){
+
       // this.isInvalid=false;
       this.validasolicitud();
       }
+    }else{
+      if(this.lstArchivo.length>0 && this.datosSignoForm.get('vcDenominacion').value!=''){
+
+        // this.isInvalid=false;
+        this.validasolicitud();
+        }
     }
+    }
+
+    // console.log("Tipo de solicitud: "+this.nuIdTipoSolicitud)
+    if(this.nuIdTipoSolicitud==2){
+      // console.log("validar 1: "+this.blReqCerLema)
+      if(this.blReqCerLema){
+        // console.log("validar 2: "+this.blReqNroExpeLema)
+        if(this.blReqNroExpeLema){
+        this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }else{
+        this.isInvalid=true;
+      }
+    }
+
+    // if(this.nuIdTipoSolicitud==3){
+    //   if(this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial!=''){
+    //     this.isInvalid=false;
+    //   }else{
+    //     this.isInvalid=true;
+    //   }
+    // }
 
 
     this.validEvent.emit(this.isInvalid);
@@ -615,13 +720,20 @@ export class DatosSignoComponent implements OnInit {
         this.isInvalid=false;
       }
     }
-
-
   }
   numericOnly(event): boolean {
     let patt = /^([0-9])$/;
     let result = patt.test(event.key);
     return result;
+  }
+
+  doValidaLetrasNumeros(event: any) {
+    let flag = false;
+    if (/^[^<>*#$&%+{}'°¬!/"()´.,;-_$]*$/.test(event.key)) {
+      flag = true;
+    }
+    return flag;
+
   }
 
   numeroClase(){
@@ -630,6 +742,8 @@ export class DatosSignoComponent implements OnInit {
     this.datosSignoForm.controls.nuClaseLema.setValue(objForm.nuClaseLema.substring(0, objForm.nuClaseLema.length-1));
    }
   }
+
+
 
 
   atras() {
@@ -641,7 +755,11 @@ export class DatosSignoComponent implements OnInit {
 
     if (this.isInvalid) return;
 
-    this.propagar.emit(3);
+    if(this.nuIdTipoSolicitud==2){
+    this.propagar.emit(5);
+    }else{
+      this.propagar.emit(3);
+    }
 
     let objDatosSigno: any = {};
     objDatosSigno.vcCertificadoLema=this.datosSignoForm.get('vcCertificadoLema').value;
@@ -663,6 +781,14 @@ export class DatosSignoComponent implements OnInit {
 
     this.globalService.agregarDatosSigno(objDatosSigno);
     this.globalService.obtenerData();
+
+    this.globalService.nuIdTipoSolicitud=this.nuIdTipoSolicitud;
+
+
+  }
+
+  editarCard(op: number) {
+    this.propagar.emit(op);
   }
 
 }

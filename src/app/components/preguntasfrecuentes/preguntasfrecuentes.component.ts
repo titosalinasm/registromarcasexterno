@@ -13,6 +13,7 @@ export class PreguntasfrecuentesComponent implements OnInit {
 
   lstPreguntasFrecuentes : any[];
   vcManual : string;
+  objConfiguracion : any;
 
   constructor( private _spinner : NgxSpinnerService,
     private _configuracionService: ConfiguracionService,
@@ -21,6 +22,7 @@ export class PreguntasfrecuentesComponent implements OnInit {
     ) {
 
       this.doPreguntasFrecuentes();
+      this.objConfiguracion=this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_P_001))[0];
     }
 
   ngOnInit(): void {

@@ -42,6 +42,14 @@ export class PrioridadExtranjeraComponent implements OnInit {
 
   objConfigArchPrioridad : any;
 
+  minDate: Date;
+  maxDate: Date;
+
+  validModal : boolean=false;
+
+  blCboTipoPrioridad: boolean=false;
+
+
   agregarPrioridadForm = this.formBuilder.group({
     // nuFlagPrioridadExtr: ['', [Validators.required]],
     nuIdClase: ['', [Validators.required]],
@@ -62,6 +70,11 @@ export class PrioridadExtranjeraComponent implements OnInit {
     private toastr : ToastrService,
   ) {
     this.localeService.use('es');
+
+    this.minDate = new Date();
+    this.maxDate = new Date();
+    this.minDate.setDate(this.minDate.getDate() - 61);
+    this.maxDate.setDate(this.maxDate.getDate()-1);
   }
 
   ngOnInit() {
@@ -85,23 +98,6 @@ export class PrioridadExtranjeraComponent implements OnInit {
   }
 
   bindEventsForm() {
-    // this.asesoriaForm.valueChanges.subscribe(
-    //   value => this.validEvent.emit(this.isInvalid)
-    // );
-
-    // console.log(this.nuFlagPrioridadExtr);
-
-    // this.agregarPrioridadForm.get('blAsesoria').valueChanges.subscribe(value => {
-    //   // let _txtNroAsesoria = this.asesoriaForm.get('txtNroAsesoria');
-    //   if (value) {
-    //     _txtNroAsesoria.enable();
-    //     _txtNroAsesoria.setValidators([Validators.required]);
-    //   } else {
-    //     _txtNroAsesoria.disable();
-    //   }
-
-    //   _txtNroAsesoria.updateValueAndValidity();
-    // });
 
     let _nuIdClase = this.agregarPrioridadForm.get('nuIdClase');
     let _nuIdTipoPrioridad = this.agregarPrioridadForm.get('nuIdTipoPrioridad');
@@ -110,7 +106,7 @@ export class PrioridadExtranjeraComponent implements OnInit {
     if (this.nuFlagTodos === 1) {
       _nuIdClase.disable();
       _nuIdTipoPrioridad.setValue(1);
-      _nuIdTipoPrioridad.disable();
+      this.blCboTipoPrioridad=true;
       _vcProductosServicios.disable();
       this.blShowClase = false;
       this.blShowProductoServicio = false;
@@ -118,39 +114,33 @@ export class PrioridadExtranjeraComponent implements OnInit {
       _nuIdClase.enable();
       _vcProductosServicios.enable();
       _nuIdTipoPrioridad.enable();
+      this.blCboTipoPrioridad=false;
       this.blShowClase = true;
       this.blShowProductoServicio = true;
     }
 
-    // this.agregarPrioridadForm.get('blAsesoria').valueChanges.subscribe(value => {
-    //   let _txtNroAsesoria = this.asesoriaForm.get('txtNroAsesoria');
-    //   if (value) {
-    //     _txtNroAsesoria.enable();
-    //     _txtNroAsesoria.setValidators([Validators.required]);
-    //   } else {
-    //     _txtNroAsesoria.disable();
-    //   }
-    // });
-  }
-  modalAgregarPrioridad(template: any) {
-    // this.blShowPersonaPide = false;
-    // this.blShowInputPide = false;
-    // this.agregarAutorForm.reset();
-    // this.lstTipoDocumentos = this.objDataGenerica.lstTipoDocumentos;
-    // this.agregarAutorForm.controls.nuTipoDocumento.setValue(1);
+    this.agregarPrioridadForm.valueChanges.subscribe(
+      value => {
+        this.validarModalPrioridad();
+        // this.validEvent.emit(this.isInvalid);
+        console.log("hay Cambios agregarPrioridadForm"+this.validModal)
+      }
+    );
 
+
+  }
+
+  modalAgregarPrioridad(template: any) {
     let objClass = { class: 'modal-lg' };
     this.openModal(template, objClass);
   }
 
   openChild(template: any, op: number) {
-    // this.blShowPersonaPide = false;
-    // this.blShowInputPide = false;
-    // this.agregarAutorForm.reset();
-    // this.lstTipoDocumentos = this.objDataGenerica.lstTipoDocumentos;
-    // this.agregarAutorForm.controls.nuTipoDocumento.setValue(1);
     this.agregarPrioridadForm.reset();
     this.nuFlagTodos = op;
+    if(this.nuFlagTodos==1){
+      this.agregarPrioridadForm.controls.nuIdTipoPrioridad.setValue(1);
+    }
     this.modalRef.hide();
     this.bindEventsForm();
     let objClass = { class: 'modal-lg' };
@@ -168,6 +158,7 @@ export class PrioridadExtranjeraComponent implements OnInit {
   }
 
   validarFormulario() {
+
     if (this.blPrioridad) {
       if (this.lstPrioridad.length > 0) this.isInvalid = false;
       else this.isInvalid = true;
@@ -176,6 +167,82 @@ export class PrioridadExtranjeraComponent implements OnInit {
       this.isInvalid = false;
     }
     this.validEvent.emit(this.isInvalid);
+
+  }
+
+  validarModalPrioridad(){
+    if(this.nuFlagTodos==2){
+      // para todas las clases
+    if(this.agregarPrioridadForm.value.nuIdClase!=null){
+      if(this.agregarPrioridadForm.value.vcNroSolicitud!=null){
+        if(this.agregarPrioridadForm.value.vcNroSolicitud!=''){
+          if(this.agregarPrioridadForm.value.vcFechaPrioridad!=null){
+            if(this.agregarPrioridadForm.value.nuPaisPrioridad!=null){
+              if(this.agregarPrioridadForm.value.nuIdTipoPrioridad!=null){
+                if(this.agregarPrioridadForm.value.vcProductosServicios!=null){
+                  if(this.agregarPrioridadForm.value.vcProductosServicios!=''){
+                  if(this.lstArchivo.length>0){
+                    this.validModal=true;
+                  }else{
+                    this.validModal=false;
+                  }
+                  }else{
+                  this.validModal=false;
+                  }
+                }else{
+                  this.validModal=false;
+                }
+              }else{
+                this.validModal=false;
+              }
+            }else{
+               this.validModal=false;
+            }
+          }else{
+            this.validModal=false;
+          }
+        }else{
+          this.validModal=false;
+        }
+      }else{
+        this.validModal=false;
+      }
+    }else{
+      this.validModal=false;
+    }
+  }else{
+    // para una sola clase
+
+      if(this.agregarPrioridadForm.value.vcNroSolicitud!=null){
+        if(this.agregarPrioridadForm.value.vcNroSolicitud!=''){
+          if(this.agregarPrioridadForm.value.vcFechaPrioridad!=null){
+            if(this.agregarPrioridadForm.value.nuPaisPrioridad!=null){
+              if(this.agregarPrioridadForm.value.nuIdTipoPrioridad!=null){
+                  if(this.lstArchivo.length>0){
+                    this.validModal=true;
+                  }else{
+                    this.validModal=false;
+                  }
+              }else{
+                this.validModal=false;
+              }
+            }else{
+               this.validModal=false;
+            }
+          }else{
+            this.validModal=false;
+          }
+        }else{
+          this.validModal=false;
+        }
+      }else{
+        this.validModal=false;
+      }
+
+  }
+
+
+
   }
 
   agregarPrioridad() {
@@ -186,7 +253,6 @@ export class PrioridadExtranjeraComponent implements OnInit {
     objPrioridad.nuFlagTodos = this.nuFlagTodos;
     objPrioridad.vcNombreClases = this.numeroTodos();
     objPrioridad.vcClases = this.nuFlagTodos === 1 ? this.lstClases.map((e) => e.nuIdClase).join(',') : this.agregarPrioridadForm.value.nuIdClase;
-    // objPrioridad.vcClases = this.nuFlagTodos === 1 ? this.numeroTodos() : this.agregarPrioridadForm.value.nuIdClase;
     objPrioridad.vcNroSolicitud = this.agregarPrioridadForm.value.vcNroSolicitud;
     objPrioridad.dtFechaPrioridad = this.agregarPrioridadForm.value.vcFechaPrioridad;
     objPrioridad.vcFechaPrioridad = this.convertirFecha(this.agregarPrioridadForm.value.vcFechaPrioridad);
@@ -201,7 +267,6 @@ export class PrioridadExtranjeraComponent implements OnInit {
       this.lstPrioridad.push(objPrioridad);
       this.validarFormulario();
     } else if (this.nuModo === 2) { // actualizar
-      // this.lstPrioridad.
       this.lstPrioridad[this.rowUpdate] = objPrioridad;
     }
     this.nuModo = 1;
@@ -213,9 +278,6 @@ export class PrioridadExtranjeraComponent implements OnInit {
     this.rowUpdate = row;
     this.nuFlagTodos = item.nuFlagTodos;
     this.agregarPrioridadForm.controls.vcNroSolicitud.setValue(item.vcNroSolicitud);
-
-    // var mydate = new Date(item.dtFechaPrioridad);
-    // console.log(mydate.toDateString());
 
     this.agregarPrioridadForm.controls.vcFechaPrioridad.setValue(item.dtFechaPrioridad);
     this.agregarPrioridadForm.controls.nuPaisPrioridad.setValue(item.nuIdUbigeoPais);
@@ -231,6 +293,7 @@ export class PrioridadExtranjeraComponent implements OnInit {
   eliminarPrioridad(index: number) {
     this.lstPrioridad.splice(index, 1);
     this.validarFormulario();
+    this.validarModalPrioridad();
   }
 
   atras() {
@@ -243,6 +306,7 @@ export class PrioridadExtranjeraComponent implements OnInit {
     if (this.isInvalid) return;
 
     this.propagar.emit(5);
+
     console.log('siguiente');
     let objPrioridadExtranjera: any = {};
     objPrioridadExtranjera.nuFlagPrioridadExtr = this.nuFlagPrioridadExtr ? 1 : 0;
@@ -258,22 +322,6 @@ export class PrioridadExtranjeraComponent implements OnInit {
     this.globalService.agregarPrioridadExtranjera(objPrioridadExtranjera);
     this.globalService.obtenerData();
   }
-
-  // cargarArchivoPrioridad(event: any) {
-  //   let objData: any = this.globalService.obtenerData();
-  //   // let result = this.verificarTipoArchivo(event, objData.objObra.nuIdTipoObra);
-  //   // if (result.length > 0) {
-  //   if (true) {
-  //     this.subirArchivo(event.target.files[0]);
-  //     // this.subirArchivo(event.target.files[0]);
-  //     // this.subirArchivo(event.target.files[0], objData.objObra.nuIdTipoObra);
-  //     // this._input_archivo_prioridad.nativeElement.value = "";
-
-  //   } else {
-  //     this._input_archivo_prioridad.nativeElement.value = "";
-  //     // this.toast.showToast('Error', 'Solo se permite la carga de los archivos ' + (this.obtenerExtensiones(objData.objObra.nuIdTipoObra) + '').replace(',', ", ") + '.', 'error');
-  //   }
-  // }
 
 
   cargarArchivoPrioridad(event : any){
@@ -313,6 +361,7 @@ export class PrioridadExtranjeraComponent implements OnInit {
     }
     // objArchivo.vcImgUrl = file.target.result;
     this.lstArchivo.push(objArchivo);
+    this.validarModalPrioridad();
 
   }else{
     this.toastr.error("El nombre es demasiado largo, el nombre de su archivo debe contener máximo 100 caracteres.", "Error");
@@ -395,6 +444,7 @@ export class PrioridadExtranjeraComponent implements OnInit {
 
   eliminarArchivoPrioridad(row: any) {
     this.lstArchivo.splice(row, 1);
+    this.validarModalPrioridad();
   }
 
   /**/

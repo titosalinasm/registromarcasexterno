@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GlobalService } from 'src/app/global.service';
 import { ConfiguracionService } from 'src/app/services/configuracion.service';
-import { TitulosNizaService } from 'src/app/services/titulos-niza.service'
+import { TitulosNizaService } from 'src/app/services/titulos-niza.service';
+import { CONSTANTES} from 'src/app/utils/constantes-globales';
 
 @Component({
   selector: 'app-clasesniza',
@@ -13,6 +14,7 @@ export class ClasesnizaComponent implements OnInit {
 
   objClaseNiza : any;
   vcManual : string;
+  objConfiguracion: any;
 
   constructor(
     private _titulosNizaService : TitulosNizaService,
@@ -22,6 +24,7 @@ export class ClasesnizaComponent implements OnInit {
   ) {
     this.doLstClaseNiza();
     this.doConfiguracion();
+    this.objConfiguracion=this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_P_001))[0];
    }
 
   ngOnInit(): void {

@@ -35,6 +35,8 @@ export class GlobalService {
 
     _lstConfig = new Subject();
 
+    _nuIdTipoSolicitud: number;
+
 
 
     obtenerData() {
@@ -237,6 +239,15 @@ export class GlobalService {
     set lstConfiguracion(obj: any) {
         this._lstConfiguracion = obj;
     }
+
+    get nuIdTipoSolicitud(): number {
+      return this._nuIdTipoSolicitud;
+  }
+
+  set nuIdTipoSolicitud(_nuIdTipoSolicitud: number) {
+      this._nuIdTipoSolicitud = _nuIdTipoSolicitud;
+  }
+
 
 
     /*Nuevas variables*/

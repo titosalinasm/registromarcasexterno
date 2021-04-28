@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {  Component, OnInit, TemplateRef, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GlobalService } from 'src/app/global.service';
 import { TitulosNizaService } from 'src/app/services/titulos-niza.service';
@@ -7,6 +7,8 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { CONSTANTES } from 'src/app/utils/constantes-globales';
 import { element } from 'protractor';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-clasificacion-signo',
@@ -21,7 +23,10 @@ export class ClasificacionSignoComponent implements OnInit {
   claseNizaForm = this.formBuilder.group({
     descripcion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
   });
+  vcNroClaseEditadaView : any='';
 
+  @ViewChild('templateEditarClase') templateEditarClase: TemplateRef<any>;
+  modalRef: BsModalRef;
   blcargarDatos: boolean = true;
   isInvalid: boolean = true;
   objConfiguracion: any = {};
@@ -35,17 +40,30 @@ export class ClasificacionSignoComponent implements OnInit {
   vcImporteClaseNizaAdicional: string;
   nuSumCantClases: number = 0;
 
+
+  rowEditado : number;
+
   //
   objResumenPago: any = {};
   valorClasePrincipal: number = 0;
   valorClaseAdicional: number = 0;
   sumaTotalClases: number = 0;
 
+  nuIdTipoSolicitud : number;
+
+  formClaseEditada = this.formBuilder.group({
+    vcClaseEditada: ['', [Validators.required]],
+  });
+
+
+
   constructor(
     private globalService: GlobalService,
     private _spinner: NgxSpinnerService,
     private formBuilder: FormBuilder,
     private titulosNizaService: TitulosNizaService,
+    private modalService: BsModalService,
+    private toastr: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -53,8 +71,32 @@ export class ClasificacionSignoComponent implements OnInit {
 
   }
 
+  doEditarClase(item : any, row : any){
+    console.log(JSON.stringify(item));
+    this.rowEditado=row;
+    this.vcNroClaseEditadaView=item.nuIdClase;
+    this.formClaseEditada.controls.vcClaseEditada.setValue(item.vcProductosServicios);
+    let objClass = { class: 'modal-lg' };
+    this.openModal(this.templateEditarClase, objClass);
+  }
+
+  doGuardarEditado(){
+    this.lstClasesNizaSeleccionadasFilter[this.rowEditado].vcProductosServicios=this.formClaseEditada.value.vcClaseEditada;
+
+    console.log(JSON.stringify(this.lstClasesNizaSeleccionadasFilter));
+
+    this.modalRef.hide();
+  }
+
+  openModal(template: TemplateRef<any>, objClass: any) {
+    this.modalRef = this.modalService.show(template, objClass);
+  }
+
+
+
   cargarDatos() {
     console.log('cargarDatos');
+    this.nuIdTipoSolicitud=this.globalService.nuIdTipoSolicitud;
     if (this.blcargarDatos) {
       let filter = this.globalService.lstConfiguracion.filter(e => e.vcCodConfiguracion.includes(CONSTANTES.pages.COD_ARANCEL));
       this.objConfiguracion = filter[0];
@@ -84,36 +126,13 @@ export class ClasificacionSignoComponent implements OnInit {
     let params = {
       vcParaBusq: '',
     }
-    // this.titulosNizaService.getWithPost$(param).subscribe(
     this.titulosNizaService.getWithPost$(params).subscribe(
       resp => {
-        // this.selectsNiza = response;
-        // console.log('data: ' + response);
-        // this.lstTitulosNiza = resp.body;
-        // console.log('data: ' + JSON.stringify(resp));
         this.lstTitulosNiza = resp.lstClase;
-        // console.log(this.lstTitulosNiza.length);
-        // this.spinner = false;
         this._spinner.hide();
-        // this.spinnerMsg = '';
-        // this.sharedService.setIsSpinner(false);
       },
       error => {
-        // if (error.status === 401 || error.status === 403) {
-        //   this.generalSerice.obtenerToken().then(value => {
-        //     this.showToast('Advertencia', CONSTANTES.msg_error.no_autorizado, 'info');
-        //     this.router.navigate(['/inicio']);
-        //   });
-        // }
-        // console.log('error: ' + JSON.stringify(<any>error));
-        // console.log('error: ' + error.message);
-        // this.spinner = false;
-        // this.spinnerMsg = '';
         this._spinner.hide();
-        // this.spinnerMsg = 'La consulta puede tardar aprox. 60 segundos.';
-        // this.sharedService.setIsSpinner(false);
-        // this.showToast('Error', 'Hubo un error al intentar acceder a nuestros servicios: ' + error.message, 'danger');
-        // this.showToast('Error', CONSTANTES.msg_error.msg, 'danger');
       },
     );
   }
@@ -139,16 +158,11 @@ export class ClasificacionSignoComponent implements OnInit {
   }
 
   agregarClaseNiza(itemClase: any, blShow: boolean) {
-    // let rpta = true;
+    if(this.globalService.nuIdTipoSolicitud!=1){
+      console.log(JSON.stringify(this.lstClasesNizaSeleccionadas.length));
+    if(this.lstClasesNizaSeleccionadas.length==0){
     if (!this.lstClasesNizaSeleccionadas.includes(itemClase)) {
-      // console.log('itemClase: ' + JSON.stringify(itemClase));
-      // let cont = 1;
-      // this.lstClasesNizaSeleccionadas.forEach(e => {
-      //   if (e.nuIdClase == itemClase.nuIdClase) {
-      //     cont++;
-      //   }
-      // });
-      // itemClase.cant = cont;
+
       this.lstClasesNizaSeleccionadas.push(itemClase);
       this.lstClasesNizaSeleccionadas = this.lstClasesNizaSeleccionadas.sort((a, b) => a.nuIdClase - b.nuIdClase);
       console.log('lstClasesNizaSeleccionadas: ' + JSON.stringify(this.lstClasesNizaSeleccionadas));
@@ -156,17 +170,36 @@ export class ClasificacionSignoComponent implements OnInit {
 
       if (blShow) {
         if (itemClase.vc_sugerencia != null)
-          // this.showToast('Sugerencia', 'Los usuarios que buscaron esta clase también buscaron: ' + itemClase.vc_sugerencia, 'warning');
-          // this.showToast('Sugerencia:', itemClase.vc_sugerencia, 'info');
           console.log('mostrar sugerencia');
-        // if (itemClase.vc_economica != null)
-        //   this.showToast('Sugerencia económica: ', itemClase.vc_economica, 'warning');
       }
       this.calcularImportes();
       this.validarFormulario();
     } else {
-      console.log('la clase ya fue agregada');
+      // console.log('la clase ya fue agregada');
+      this.toastr.error('La clase ya fue agregada', 'Error');
     }
+  }else{
+    this.toastr.error('Solo puedes agregar 1 clase para tu tipo de solicitud', 'Error');
+  }
+  }else{
+    if (!this.lstClasesNizaSeleccionadas.includes(itemClase)) {
+
+      this.lstClasesNizaSeleccionadas.push(itemClase);
+      this.lstClasesNizaSeleccionadas = this.lstClasesNizaSeleccionadas.sort((a, b) => a.nuIdClase - b.nuIdClase);
+      console.log('lstClasesNizaSeleccionadas: ' + JSON.stringify(this.lstClasesNizaSeleccionadas));
+      this.lstClasesNizaSeleccionadasFilter = this.lstClasesNizaSeleccionadas.slice(0, 5);
+
+      if (blShow) {
+        if (itemClase.vc_sugerencia != null)
+          console.log('mostrar sugerencia');
+      }
+      this.calcularImportes();
+      this.validarFormulario();
+    } else {
+      // console.log('la clase ya fue agregada');
+      this.toastr.error('La clase ya fue agregada', 'Error');
+    }
+  }
   }
 
   validarFormulario() {
@@ -192,9 +225,7 @@ export class ClasificacionSignoComponent implements OnInit {
     console.log('arr: ' + arr);
     this.nuSumCantClases = arr.length;
     let cantidad = arr.length;
-    // let cantidad = this.lstClasesNizaSeleccionadas.length;
     let objArancelPrincipal = this.objConfiguracion.clValor1.lstAranceles.filter(e => e.nuId == 1)[0];
-    // console.log('objArancelPrincipal: ' + JSON.stringify(objArancelPrincipal));
     let objArancelAdicional = this.objConfiguracion.clValor1.lstAranceles.filter(e => e.nuId == 2)[0];
     if (cantidad > 1) {
       this.objResumenPago.valorClasePrincipal = objArancelPrincipal.nuCosto * 1;
@@ -202,19 +233,11 @@ export class ClasificacionSignoComponent implements OnInit {
       this.objResumenPago.nuSumCantClases = cantidad;
       this.objResumenPago.sumaTotalClases = this.objResumenPago.valorClasePrincipal + this.objResumenPago.valorClaseAdicional;
 
-      // this.valorClasePrincipal = objArancelPrincipal.nuCosto * 1;
-      // this.valorClaseAdicional = objArancelAdicional.nuCosto * (cantidad - 1);
-      // this.sumaTotalClases = this.valorClasePrincipal + this.valorClaseAdicional;
     } else {
       this.objResumenPago.valorClasePrincipal = objArancelPrincipal.nuCosto * 1;
       this.objResumenPago.valorClaseAdicional = 0;
       this.objResumenPago.nuSumCantClases = cantidad;
       this.objResumenPago.sumaTotalClases = this.objResumenPago.valorClasePrincipal + this.objResumenPago.valorClaseAdicional;
-
-      // this.valorClasePrincipal = objArancelPrincipal.nuCosto * 1;
-      // this.valorClaseAdicional = 0;
-      // this.objResumenPago.cantidad = cantidad;
-      // this.sumaTotalClases = this.valorClasePrincipal + this.valorClaseAdicional;
     }
   }
 
@@ -240,7 +263,12 @@ export class ClasificacionSignoComponent implements OnInit {
     if (this.isInvalid) return;
 
     console.log('siguiente');
+
+    if(this.globalService.nuIdTipoSolicitud==3)
+    this.propagar.emit(5);
+    else
     this.propagar.emit(4);
+
     // let objClasificacion: any = {};
     let lstClases: any[] = [];
     this.lstClasesNizaSeleccionadas.forEach(function (v, i) {
