@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   // apiURL: '--dev',
   apiURL: {
-     registroURL: 'https://desapache.indecopi.gob.pe/appDSDRegMarcasApi',
-    // registroURL: 'http://localhost:8080/appDSDRegMarcasApi',
+    //  registroURL: 'https://desapache.indecopi.gob.pe/appDSDRegMarcasApi',
+    registroURL: 'http://localhost:8080/appDSDRegMarcasApi',
     //  registroURL: 'https://qa2.indecopi.gob.pe/appDSDRegMarcasApi',
   }
 };

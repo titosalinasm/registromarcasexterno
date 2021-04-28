@@ -117,7 +117,7 @@
                     [minDate]="minDate"
                     [maxDate]="maxDate"
                     formControlName="vcFechaPrimerUsoNombreComercial" bsDatepicker readonly>
-            <div class="_message_error" *ngIf="datosSignoForm.value.vcFechaPrimerUsoNombreComercial==''">
+            <div class="_message_error" *ngIf="datosSignoForm.value.vcFechaPrimerUsoNombreComercial==null">
                       <i class="fa fa-exclamation-circle" aria-hidden="true"></i> (Campo obligatorio) ingrese fecha de primer uso
             </div>
           </div>

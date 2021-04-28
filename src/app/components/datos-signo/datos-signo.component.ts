@@ -9,6 +9,7 @@ import { ValidaExpedienteService } from 'src/app/services/valida-expediente.serv
 import { ValidaCertificadoService } from 'src/app/services/valida-certificado.service';
 import { copyFileSync } from 'node:fs';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { DataConfigResolverService } from 'src/app/services/data-config-resolve.service';
 @Component({
   selector: 'app-datos-signo',
   templateUrl: './datos-signo.component.html',
@@ -617,71 +618,324 @@ export class DatosSignoComponent implements OnInit {
     this.validarFormulario();
   }
 
-  validarFormulario() {
-    console.log("validarFormulario ");
-    // this.datosSignoForm.controls.vcNroExpediente.disable();
-    // this.datosSignoForm.controls.vcNroCertificado.disable();
-    this.isInvalid=true;
+  doValidaSubP11(){
+    console.log(this.datosSignoForm.value.vcDenominacion)
+    if(this.datosSignoForm.value.vcDenominacion==null || this.datosSignoForm.value.vcDenominacion==''){
+      this.isInvalid=true;
 
-    if(this.objTipoSignoSeleccionado.nuIdTipoPresentacion==1){
-      this.datosSignoForm.get('vcDenominacion').setValidators([Validators.required]);
-      // this.datosSignoForm.get('vcDenominacion').updateValueAndValidity();
-
-      if(this.datosSignoForm.get('vcDenominacion').value!=''){
-        // this.isInvalid=false;
-        this.validasolicitud();
-      }
-    }
-
-    if(this.objTipoSignoSeleccionado.nuIdTipoPresentacion==2){
-      if(this.lstArchivo.length>0){
-      // this.isInvalid=false;
-      this.validasolicitud();
-    }
-
-
-    }
-
-
-    if(this.objTipoSignoSeleccionado.nuIdTipoPresentacion>2){
-      if(this.nuIdTipoSolicitud==3){
-      if(this.lstArchivo.length>0 && this.datosSignoForm.get('vcDenominacion').value!='' && this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial!=''){
-
-      // this.isInvalid=false;
-      this.validasolicitud();
-      }
     }else{
-      if(this.lstArchivo.length>0 && this.datosSignoForm.get('vcDenominacion').value!=''){
+      // this.isInvalid=false;
+      this.validasolicitud();
 
-        // this.isInvalid=false;
-        this.validasolicitud();
-        }
-    }
-    }
-
-    // console.log("Tipo de solicitud: "+this.nuIdTipoSolicitud)
-    if(this.nuIdTipoSolicitud==2){
-      // console.log("validar 1: "+this.blReqCerLema)
-      if(this.blReqCerLema){
-        // console.log("validar 2: "+this.blReqNroExpeLema)
-        if(this.blReqNroExpeLema){
-        this.isInvalid=false;
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
         }else{
           this.isInvalid=true;
         }
-      }else{
-        this.isInvalid=true;
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
       }
     }
+  }
 
-    // if(this.nuIdTipoSolicitud==3){
-    //   if(this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial!=''){
-    //     this.isInvalid=false;
-    //   }else{
-    //     this.isInvalid=true;
-    //   }
-    // }
+  doValidaSubP12(){
+    if(this.lstArchivo.length<1){
+      this.isInvalid=true;
+    }else{
+      // this.isInvalid=false;
+      this.validasolicitud();
 
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+    }
+  }
+
+  doValidaSubP13(){
+    if(this.lstArchivo.length<1  || this.datosSignoForm.value.vcDenominacion==null || this.datosSignoForm.value.vcDenominacion==''){
+      this.isInvalid=true;
+    }else{
+      // this.isInvalid=false;
+      this.validasolicitud();
+
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+    }
+  }
+
+  doValidaP1(){
+    switch(this.objTipoSignoSeleccionado.nuIdTipoPresentacion){
+      case 1:
+      this.doValidaSubP11();
+      break;
+      case 2:
+      this.doValidaSubP12();
+      break;
+      case 3:
+      this.doValidaSubP13();
+      break;
+      case 4:
+      this.doValidaSubP13();
+      break;
+      case 5:
+      this.doValidaSubP13();
+      break;
+      case 6:
+      this.doValidaSubP13();
+      break;
+      case 7:
+      this.doValidaSubP13();
+      break;
+      case 8:
+      this.doValidaSubP13();
+      break;
+      case 9:
+      this.doValidaSubP13();
+      break;
+      case 10:
+      this.doValidaSubP13();
+      break;
+      default:
+
+      break;
+    }
+  }
+
+    doValidaP2(){
+    switch(this.objTipoSignoSeleccionado.nuIdTipoPresentacion){
+      case 1:
+      this.doValidaSubP21();
+      break;
+      case 2:
+      break;
+      case 3:
+        break;
+      case 4:
+        break;
+      case 5:
+        break;
+      case 6:
+        break;
+      case 7:
+        break;
+      case 8:
+        break;
+      case 9:
+        break;
+      case 10:
+      break;
+      default:
+
+      break;
+    }
+  }
+
+  doValidaSubP21(){
+    // console.log(this.datosSignoForm.value.vcDenominacion)
+    if(this.datosSignoForm.value.vcDenominacion==null || this.datosSignoForm.value.vcDenominacion==''){
+      this.isInvalid=true;
+
+    }else{
+      // this.isInvalid=false;
+      this.validasolicitud();
+
+      if(this.blReqCerLema && this.blReqNroExpeLema){
+        this.isInvalid=false;
+      }else{
+      this.isInvalid=true;
+      }
+
+
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+    }
+  }
+
+  doValidaP3(){
+    switch(this.objTipoSignoSeleccionado.nuIdTipoPresentacion){
+      case 1:
+      this.doValidaSubP31();
+      break;
+      case 2:
+      this.doValidaSubP32();
+      break;
+      case 3:
+      this.doValidaSubP33();
+        break;
+      case 4:
+        this.doValidaSubP33();
+        break;
+      case 5:
+        this.doValidaSubP33();
+        break;
+      case 6:
+        this.doValidaSubP33();
+        break;
+      case 7:
+        this.doValidaSubP33();
+        break;
+      case 8:
+        this.doValidaSubP33();
+        break;
+      case 9:
+        this.doValidaSubP33();
+        break;
+      case 10:
+        this.doValidaSubP33();
+      break;
+      default:
+
+      break;
+    }
+  }
+
+  doValidaSubP31(){
+    // console.log(this.datosSignoForm.value.vcDenominacion)
+    if(this.datosSignoForm.value.vcDenominacion==null || this.datosSignoForm.value.vcDenominacion=='' || this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial==null){
+      this.isInvalid=true;
+
+    }else{
+      // this.isInvalid=false;
+      this.validasolicitud();
+
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+    }
+  }
+
+  doValidaSubP32(){
+    if(this.lstArchivo.length<1 || this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial==null){
+      this.isInvalid=true;
+    }else{
+      // this.isInvalid=false;
+      this.validasolicitud();
+
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+    }
+  }
+
+  doValidaSubP33(){
+    if(this.lstArchivo.length<1  || this.datosSignoForm.value.vcDenominacion==null || this.datosSignoForm.value.vcDenominacion=='' || this.datosSignoForm.value.vcFechaPrimerUsoNombreComercial==null){
+      this.isInvalid=true;
+    }else{
+      // this.isInvalid=false;
+      this.validasolicitud();
+
+      if(this.datosSignoForm.value.blInteresReal){
+        if(this.btnValidoExpediente){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+
+      if(this.datosSignoForm.value.blDerechoPreferente){
+        if(this.btnValidoCertificado){
+          this.isInvalid=false;
+        }else{
+          this.isInvalid=true;
+        }
+      }
+    }
+  }
+
+  validarFormulario() {
+    console.log("validarFormulario");
+
+    this.isInvalid=true;
+
+    switch(this.nuIdTipoSolicitud){
+      case 1:
+      this.doValidaP1();
+      break;
+      case 2:
+      this.doValidaP2();
+      break;
+      case 3:
+      this.doValidaP3();
+      break;
+      case 4:
+      this.doValidaP1();
+      break;
+      case 5:
+      this.doValidaP1();
+      break;
+      default:
+
+      break;
+    }
 
     this.validEvent.emit(this.isInvalid);
   }
@@ -760,13 +1014,17 @@ export class DatosSignoComponent implements OnInit {
     }else{
       this.propagar.emit(3);
     }
+    for(let i=0; i<this.lstArchivoDocumentos.length; i++){
+    this.lstArchivo.push(this.lstArchivoDocumentos[i]);
+    }
+
 
     let objDatosSigno: any = {};
-    objDatosSigno.vcCertificadoLema=this.datosSignoForm.get('vcCertificadoLema').value;
-    objDatosSigno.vcNroExpedienteLema=this.datosSignoForm.get('vcNroExpedienteLema').value;
-    objDatosSigno.nuClaseLema=this.datosSignoForm.get('nuClaseLema').value;
-    objDatosSigno.vcNroExpedienteNombreComercial=this.datosSignoForm.get('vcNroExpedienteNombreComercial').value;
-    objDatosSigno.vcFechaPrimerUsoNombreComercial=this.datosSignoForm.get('vcFechaPrimerUsoNombreComercial').value;
+    objDatosSigno.vcCertificadoLema=this.blReqCerLema?this.datosSignoForm.get('vcCertificadoLema').value:'';
+    objDatosSigno.vcNroExpedienteLema=this.blReqNroExpeLema?this.datosSignoForm.get('vcNroExpedienteLema').value:'';
+    objDatosSigno.nuClaseLema=this.nuIdTipoSolicitud==2?this.datosSignoForm.get('nuClaseLema').value:null;
+    objDatosSigno.vcNroExpedienteNombreComercial=this.blReqNroExpeNombComercial?this.datosSignoForm.get('vcNroExpedienteNombreComercial').value:'';
+    objDatosSigno.vcFechaPrimerUsoNombreComercial=this.nuIdTipoSolicitud==3?this.convertirFecha(this.datosSignoForm.get('vcFechaPrimerUsoNombreComercial').value):'';
 
     objDatosSigno.nuIdTipoSolicitud = this.nuIdTipoSolicitud;
     objDatosSigno.nuFlagInteresReal = this.datosSignoForm.get('blInteresReal').value ? 1 : 0;
@@ -779,12 +1037,22 @@ export class DatosSignoComponent implements OnInit {
     objDatosSigno.nuFlagReinvindicaCol = this.datosSignoForm.get('blReinvindicaColor').value ? 1 : 0;
     // objDatosSigno.nuFlagReinvindicaCol = 1;
 
+    console.log("objDatosSigno=> "+JSON.stringify(objDatosSigno))
+
     this.globalService.agregarDatosSigno(objDatosSigno);
     this.globalService.obtenerData();
 
     this.globalService.nuIdTipoSolicitud=this.nuIdTipoSolicitud;
 
 
+  }
+
+
+  convertirFecha(date: any) {
+    const dia = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    const mes = date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+    const ano = date.getFullYear();
+    return ano + '-' + mes + '-' + dia;
   }
 
   editarCard(op: number) {
